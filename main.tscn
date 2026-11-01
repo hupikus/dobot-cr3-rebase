@@ -5,13 +5,20 @@
 [ext_resource type="Material" uid="uid://sxdbor6lgd4s" path="res://materials/inner_mesh.tres" id="2_1bvp3"]
 [ext_resource type="Script" uid="uid://b2wh4tpkbf7nm" path="res://script/controls/xr.gd" id="2_7mycd"]
 [ext_resource type="PackedScene" uid="uid://bsa5tua42yenc" path="res://nodes/arm_ghost.tscn" id="3_1bvp3"]
+[ext_resource type="Shader" uid="uid://cbomsjly5yddc" path="res://shaders/sky.gdshader" id="3_5vw27"]
+[ext_resource type="Shader" uid="uid://ce4wxmvx0x0sq" path="res://shaders/floor.gdshader" id="4_kek77"]
 [ext_resource type="PackedScene" uid="uid://c1bx1qcflef0g" path="res://nodes/arm_solid.tscn" id="4_lquwl"]
 [ext_resource type="Script" uid="uid://dllxoj03du823" path="res://script/dobot_cr3/handle.gd" id="6_272bh"]
 
-[sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6wiwe"]
+shader = ExtResource("3_5vw27")
+shader_parameter/horizon_color = Color(0.14, 0.16, 0.2, 1)
+shader_parameter/zenith_color = Color(0.06, 0.07, 0.1, 1)
+shader_parameter/gradient_power = 0.8
+shader_parameter/grain = 0.004
 
 [sub_resource type="Sky" id="sky"]
-sky_material = SubResource("sky_mat")
+sky_material = SubResource("ShaderMaterial_6wiwe")
 
 [sub_resource type="Environment" id="env"]
 background_mode = 2
@@ -19,8 +26,15 @@ sky = SubResource("sky")
 ambient_light_source = 3
 tonemap_mode = 2
 
-[sub_resource type="StandardMaterial3D" id="floor_mat"]
-albedo_color = Color(0.28, 0.3, 0.33, 1)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4c57u"]
+render_priority = 0
+shader = ExtResource("4_kek77")
+shader_parameter/center_color = Color(0.13, 0.14, 0.17, 1)
+shader_parameter/edge_color = Color(0.035, 0.04, 0.05, 1)
+shader_parameter/grid_color = Color(0.2, 0.22, 0.27, 1)
+shader_parameter/grid_spacing = 0.5
+shader_parameter/center_radius = 1.5
+shader_parameter/fade_radius = 7.0
 
 [sub_resource type="PlaneMesh" id="floor_mesh"]
 size = Vector2(12, 12)
@@ -71,17 +85,25 @@ script = ExtResource("2_7mycd")
 environment = SubResource("env")
 
 [node name="Sun" type="DirectionalLight3D" parent="." unique_id=295380035]
-transform = Transform3D(0.866186, -0.295411, 0.403057, 0, 0.806562, 0.59115, -0.499722, -0.512046, 0.698632, 1.5, 3, 2)
+transform = Transform3D(0.46276018, 0.52404493, -0.7150027, -9.927206e-10, 0.8065615, 0.5911499, 0.88648343, -0.27356097, 0.3732457, 1.5, 3, 2)
+light_color = Color(0.71426076, 0.6599771, 0.70866597, 1)
+
+[node name="Sun" type="DirectionalLight3D" parent="Sun" unique_id=3426837]
+transform = Transform3D(0.61889446, -0.70505536, 0.34621787, -0.33674386, 0.16005066, 0.92789406, -0.7096291, -0.69085497, -0.13836858, 5.6131454, 5.373857, -5.099466)
+light_color = Color(0.7322589, 0.7969438, 0.9022772, 1)
+light_indirect_energy = 4.895
+light_volumetric_fog_energy = 1.296
+light_angular_distance = 52.5
 
 [node name="Floor" type="MeshInstance3D" parent="." unique_id=1461899162]
-material_override = SubResource("floor_mat")
+transform = Transform3D(8.216816, 0, 0, 0, 1, 0, 0, 0, 3.4701366, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_4c57u")
 mesh = SubResource("floor_mesh")
 
 [node name="Table" type="StaticBody3D" parent="." unique_id=945603866]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.71, -0.55)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6448379, -0.55)
 
 [node name="Mesh" type="MeshInstance3D" parent="Table" unique_id=359749556]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0647369, 0)
 material_override = SubResource("table_mat")
 mesh = SubResource("table_mesh")
 
@@ -112,6 +134,12 @@ mesh = SubResource("target_mesh")
 transform = Transform3D(0.925, 0, 0, 0, 0.925, 0, 0, 0, 0.925, 0, 0, 0)
 material_override = ExtResource("2_1bvp3")
 mesh = SubResource("target_mesh")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Target/OuterMesh/InnerMesh" unique_id=875436282]
+light_color = Color(0.4602453, 0.75508696, 0.89023274, 1)
+light_energy = 0.111
+light_size = 0.028
+light_bake_mode = 1
 
 [node name="ArmGhost" parent="." unique_id=1031545588 instance=ExtResource("3_1bvp3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, -0.75)

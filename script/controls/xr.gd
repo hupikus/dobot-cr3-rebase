@@ -19,8 +19,8 @@ var enabled = false
 @onready var target: Node3D = $"../../Target"
 @onready var xr_origin: XROrigin3D = $"../../XROrigin3D"
 @onready var hands: Array[XRController3D] = [
-	$XROrigin3D/LeftHand,
-	$XROrigin3D/RightHand,
+	$"../../XROrigin3D/LeftHand",
+	$"../../XROrigin3D/RightHand",
 ]
 
 # XR action names (default Windows OpenXR action map).
