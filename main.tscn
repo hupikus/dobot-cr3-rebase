@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://cyx0q1uy8x5lg"]
 
-[ext_resource type="PackedScene" uid="uid://buqsepov5w5um" path="res://models/dobot_cr3.fbx" id="1_fbx"]
+[ext_resource type="Material" uid="uid://6b6ynmxbx3py" path="res://materials/outer_mesh.tres" id="1_h2yge"]
+[ext_resource type="Material" uid="uid://sxdbor6lgd4s" path="res://materials/inner_mesh.tres" id="2_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://bsa5tua42yenc" path="res://nodes/arm_ghost.tscn" id="3_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://c1bx1qcflef0g" path="res://nodes/arm_solid.tscn" id="4_lquwl"]
 
 [sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
 
@@ -37,18 +40,6 @@ size = Vector3(0.12, 0.4, 0.12)
 [sub_resource type="BoxMesh" id="block_mesh"]
 size = Vector3(0.22, 0.16, 0.22)
 
-[sub_resource type="StandardMaterial3D" id="target_mat"]
-transparency = 1
-albedo_color = Color(0.3, 0.65, 1, 0.65)
-
-[sub_resource type="SphereMesh" id="SphereMesh_ig7tw"]
-radius = 0.05
-height = 0.1
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xm2m"]
-transparency = 1
-albedo_color = Color(1, 1, 1, 0.2901961)
-
 [sub_resource type="SphereMesh" id="target_mesh"]
 radius = 0.05
 height = 0.1
@@ -56,6 +47,7 @@ height = 0.1
 [sub_resource type="StandardMaterial3D" id="screen_mat"]
 
 [sub_resource type="QuadMesh" id="screen_mesh"]
+lightmap_size_hint = Vector2i(5, 4)
 size = Vector2(0.72, 0.45)
 
 [node name="ManipulatorStation" type="Node3D" unique_id=1095012181]
@@ -96,24 +88,26 @@ mesh = SubResource("block_mesh")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22955, 1.4296, -0.75)
 
 [node name="OuterMesh" type="MeshInstance3D" parent="Target" unique_id=1655934572]
-material_override = SubResource("target_mat")
-mesh = SubResource("SphereMesh_ig7tw")
-
-[node name="InnerMesh" type="MeshInstance3D" parent="Target/OuterMesh" unique_id=405420548]
-transform = Transform3D(0.87, 0, 0, 0, 0.87, 0, 0, 0, 0.87, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_0xm2m")
+transform = Transform3D(1.038, 0, 0, 0, 1.038, 0, 0, 0, 1.038, 0, 0, 0)
+material_override = ExtResource("1_h2yge")
 mesh = SubResource("target_mesh")
 
-[node name="ArmGhost" parent="." unique_id=1368359257 instance=ExtResource("1_fbx")]
+[node name="InnerMesh" type="MeshInstance3D" parent="Target/OuterMesh" unique_id=405420548]
+transform = Transform3D(0.925, 0, 0, 0, 0.925, 0, 0, 0, 0.925, 0, 0, 0)
+material_override = ExtResource("2_1bvp3")
+mesh = SubResource("target_mesh")
+
+[node name="ArmGhost" parent="." unique_id=1031545588 instance=ExtResource("3_1bvp3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, -0.75)
 
-[node name="ArmSolid" parent="." unique_id=2147204459 instance=ExtResource("1_fbx")]
+[node name="ArmSolid" parent="." unique_id=1296330062 instance=ExtResource("4_lquwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, -0.75)
 
 [node name="Screen" type="Node3D" parent="." unique_id=1689325039]
 transform = Transform3D(0.45447, 0.337224, -0.824461, 0, 0.925569, 0.378579, 0.890762, -0.172053, 0.420644, 0.98, 1.05, -0.5)
 
 [node name="Frame" type="MeshInstance3D" parent="Screen" unique_id=836317613]
+transform = Transform3D(1.3925574, 1.4901161e-08, 5.9604645e-08, 0, 1.3925575, 6.7055225e-08, 5.9604645e-08, 1.4901161e-08, 1.3925574, 0, 0, 0)
 material_override = SubResource("screen_mat")
 mesh = SubResource("screen_mesh")
 
