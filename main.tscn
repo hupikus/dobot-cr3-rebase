@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cyx0q1uy8x5lg"]
 
 [ext_resource type="Material" uid="uid://6b6ynmxbx3py" path="res://materials/outer_mesh.tres" id="1_h2yge"]
+[ext_resource type="Script" uid="uid://r167skqi13tx" path="res://script/ui/mouse_controls.gd" id="1_lquwl"]
 [ext_resource type="Material" uid="uid://sxdbor6lgd4s" path="res://materials/inner_mesh.tres" id="2_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://bsa5tua42yenc" path="res://nodes/arm_ghost.tscn" id="3_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://c1bx1qcflef0g" path="res://nodes/arm_solid.tscn" id="4_lquwl"]
@@ -45,12 +46,19 @@ radius = 0.05
 height = 0.1
 
 [sub_resource type="StandardMaterial3D" id="screen_mat"]
+albedo_color = Color(0.1584723, 0.15847233, 0.1584723, 1)
 
-[sub_resource type="QuadMesh" id="screen_mesh"]
-lightmap_size_hint = Vector2i(5, 4)
+[sub_resource type="PlaneMesh" id="PlaneMesh_7mycd"]
 size = Vector2(0.72, 0.45)
 
 [node name="ManipulatorStation" type="Node3D" unique_id=1095012181]
+
+[node name="Effects" type="Node3D" parent="." unique_id=584400388]
+
+[node name="Grid" type="Node3D" parent="Effects" unique_id=1855080120]
+
+[node name="MouseControls" type="Node3D" parent="." unique_id=21186993]
+script = ExtResource("1_lquwl")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1417810211]
 environment = SubResource("env")
@@ -66,6 +74,7 @@ mesh = SubResource("floor_mesh")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.71, -0.55)
 
 [node name="Mesh" type="MeshInstance3D" parent="Table" unique_id=359749556]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0647369, 0)
 material_override = SubResource("table_mat")
 mesh = SubResource("table_mesh")
 
@@ -107,9 +116,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, -0.75)
 transform = Transform3D(0.45447, 0.337224, -0.824461, 0, 0.925569, 0.378579, 0.890762, -0.172053, 0.420644, 0.98, 1.05, -0.5)
 
 [node name="Frame" type="MeshInstance3D" parent="Screen" unique_id=836317613]
-transform = Transform3D(1.3925574, 1.4901161e-08, 5.9604645e-08, 0, 1.3925575, 6.7055225e-08, 5.9604645e-08, 1.4901161e-08, 1.3925574, 0, 0, 0)
+transform = Transform3D(1.3925574, 0, 0, 0, -0.22504291, -1.3742532, 0, 1.3742533, -0.2250429, 0, 0, 0)
 material_override = SubResource("screen_mat")
-mesh = SubResource("screen_mesh")
+mesh = SubResource("PlaneMesh_7mycd")
 
 [node name="SubViewport" type="SubViewport" parent="Screen" unique_id=1751951395]
 disable_3d = true
