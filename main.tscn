@@ -8,6 +8,8 @@
 [ext_resource type="Shader" uid="uid://cbomsjly5yddc" path="res://shaders/sky.gdshader" id="3_5vw27"]
 [ext_resource type="Shader" uid="uid://ce4wxmvx0x0sq" path="res://shaders/floor.gdshader" id="4_kek77"]
 [ext_resource type="PackedScene" uid="uid://c1bx1qcflef0g" path="res://nodes/arm_solid.tscn" id="4_lquwl"]
+[ext_resource type="Shader" uid="uid://sel3bua65tve" path="res://shaders/obstacle_mesh.gdshader" id="5_4c57u"]
+[ext_resource type="Shader" uid="uid://ctcnh2a1iu33d" path="res://shaders/table_outline.gdshader" id="5_efxa6"]
 [ext_resource type="Script" uid="uid://dllxoj03du823" path="res://script/dobot_cr3/handle.gd" id="6_272bh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6wiwe"]
@@ -36,23 +38,54 @@ shader_parameter/grid_spacing = 0.5
 shader_parameter/center_radius = 1.5
 shader_parameter/fade_radius = 7.0
 
-[sub_resource type="PlaneMesh" id="floor_mesh"]
-size = Vector2(12, 12)
+[sub_resource type="CylinderMesh" id="CylinderMesh_kek77"]
+top_radius = 100.0
+height = 0.001
 
 [sub_resource type="StandardMaterial3D" id="table_mat"]
-albedo_color = Color(0.13, 0.135, 0.145, 1)
+albedo_color = Color(0.11207495, 0.13335153, 0.14733289, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ycdy4"]
+render_priority = 0
+shader = ExtResource("5_efxa6")
+shader_parameter/outline_color = Color(0.12, 0.65, 0.62, 1)
+shader_parameter/outline_width_px = 2.0
+shader_parameter/viewport_size = Vector2(1920, 1080)
 
 [sub_resource type="BoxMesh" id="table_mesh"]
 size = Vector3(1.4, 0.06, 0.9)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_efxa6"]
+transparency = 4
+albedo_color = Color(0.11207495, 0.2827793, 0.27619392, 0.18)
+
 [sub_resource type="BoxShape3D" id="table_shape"]
 size = Vector3(1.4, 0.06, 0.9)
 
-[sub_resource type="StandardMaterial3D" id="obstacle_mat"]
-albedo_color = Color(0.55, 0.2, 0.15, 1)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_efxa6"]
+render_priority = 0
+shader = ExtResource("5_4c57u")
+shader_parameter/base_color = Color(0.42, 0.15, 0.11, 1)
+shader_parameter/rim_color = Color(1, 0.55, 0.35, 1)
+shader_parameter/scan_color = Color(1, 0.72, 0.5, 1)
+shader_parameter/rim_power = 2.5
+shader_parameter/scan_density = 7.0
+shader_parameter/scan_speed = 0.35
+shader_parameter/scan_strength = 0.35
 
 [sub_resource type="BoxMesh" id="pillar_mesh"]
 size = Vector3(0.12, 0.4, 0.12)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dg77c"]
+render_priority = 0
+shader = ExtResource("5_4c57u")
+shader_parameter/base_color = Color(0.42, 0.15, 0.11, 1)
+shader_parameter/rim_color = Color(1, 0.55, 0.35, 1)
+shader_parameter/scan_color = Color(1, 0.72, 0.5, 1)
+shader_parameter/rim_power = 2.5
+shader_parameter/scan_density = 7.0
+shader_parameter/scan_speed = 0.35
+shader_parameter/scan_strength = 0.35
 
 [sub_resource type="BoxMesh" id="block_mesh"]
 size = Vector3(0.22, 0.16, 0.22)
@@ -96,15 +129,21 @@ light_volumetric_fog_energy = 1.296
 light_angular_distance = 52.5
 
 [node name="Floor" type="MeshInstance3D" parent="." unique_id=1461899162]
-transform = Transform3D(8.216816, 0, 0, 0, 1, 0, 0, 0, 3.4701366, 0, 0, 0)
+transform = Transform3D(100, 0, 0, 0, 1, 0, 0, 0, 100, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_4c57u")
-mesh = SubResource("floor_mesh")
+mesh = SubResource("CylinderMesh_kek77")
 
 [node name="Table" type="StaticBody3D" parent="." unique_id=945603866]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6448379, -0.55)
 
 [node name="Mesh" type="MeshInstance3D" parent="Table" unique_id=359749556]
 material_override = SubResource("table_mat")
+material_overlay = SubResource("ShaderMaterial_ycdy4")
+mesh = SubResource("table_mesh")
+
+[node name="MeshTint" type="MeshInstance3D" parent="Table" unique_id=679960613]
+transform = Transform3D(1.007, 0, 0, 0, 1.015, 0, 0, 0, 1.015, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_efxa6")
 mesh = SubResource("table_mesh")
 
 [node name="Collision" type="CollisionShape3D" parent="Table" unique_id=1538464604]
@@ -114,12 +153,12 @@ shape = SubResource("table_shape")
 
 [node name="Pillar" type="MeshInstance3D" parent="Obstacles" unique_id=1833631588 groups=["obstacles"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.8596876, -0.52)
-material_override = SubResource("obstacle_mat")
+material_override = SubResource("ShaderMaterial_efxa6")
 mesh = SubResource("pillar_mesh")
 
 [node name="Block" type="MeshInstance3D" parent="Obstacles" unique_id=1741854821 groups=["obstacles"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.29846945, 0.89360774, -0.45)
-material_override = SubResource("obstacle_mat")
+material_override = SubResource("ShaderMaterial_dg77c")
 mesh = SubResource("block_mesh")
 
 [node name="Target" type="Node3D" parent="." unique_id=627924243]
