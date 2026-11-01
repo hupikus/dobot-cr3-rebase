@@ -1,0 +1,145 @@
+[gd_scene format=3 uid="uid://cyx0q1uy8x5lg"]
+
+[ext_resource type="PackedScene" uid="uid://buqsepov5w5um" path="res://models/dobot_cr3.fbx" id="1_fbx"]
+
+[sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
+
+[sub_resource type="Sky" id="sky"]
+sky_material = SubResource("sky_mat")
+
+[sub_resource type="Environment" id="env"]
+background_mode = 2
+sky = SubResource("sky")
+ambient_light_source = 3
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="floor_mat"]
+albedo_color = Color(0.28, 0.3, 0.33, 1)
+
+[sub_resource type="PlaneMesh" id="floor_mesh"]
+size = Vector2(12, 12)
+
+[sub_resource type="StandardMaterial3D" id="table_mat"]
+albedo_color = Color(0.13, 0.135, 0.145, 1)
+
+[sub_resource type="BoxMesh" id="table_mesh"]
+size = Vector3(1.4, 0.06, 0.9)
+
+[sub_resource type="BoxShape3D" id="table_shape"]
+size = Vector3(1.4, 0.06, 0.9)
+
+[sub_resource type="StandardMaterial3D" id="obstacle_mat"]
+albedo_color = Color(0.55, 0.2, 0.15, 1)
+
+[sub_resource type="BoxMesh" id="pillar_mesh"]
+size = Vector3(0.12, 0.4, 0.12)
+
+[sub_resource type="BoxMesh" id="block_mesh"]
+size = Vector3(0.22, 0.16, 0.22)
+
+[sub_resource type="StandardMaterial3D" id="target_mat"]
+transparency = 1
+albedo_color = Color(0.3, 0.65, 1, 0.65)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ig7tw"]
+radius = 0.05
+height = 0.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xm2m"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.2901961)
+
+[sub_resource type="SphereMesh" id="target_mesh"]
+radius = 0.05
+height = 0.1
+
+[sub_resource type="StandardMaterial3D" id="screen_mat"]
+
+[sub_resource type="QuadMesh" id="screen_mesh"]
+size = Vector2(0.72, 0.45)
+
+[node name="ManipulatorStation" type="Node3D" unique_id=1095012181]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1417810211]
+environment = SubResource("env")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=295380035]
+transform = Transform3D(0.866186, -0.295411, 0.403057, 0, 0.806562, 0.59115, -0.499722, -0.512046, 0.698632, 1.5, 3, 2)
+
+[node name="Floor" type="MeshInstance3D" parent="." unique_id=1461899162]
+material_override = SubResource("floor_mat")
+mesh = SubResource("floor_mesh")
+
+[node name="Table" type="StaticBody3D" parent="." unique_id=945603866]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.71, -0.55)
+
+[node name="Mesh" type="MeshInstance3D" parent="Table" unique_id=359749556]
+material_override = SubResource("table_mat")
+mesh = SubResource("table_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Table" unique_id=1538464604]
+shape = SubResource("table_shape")
+
+[node name="Obstacles" type="Node3D" parent="." unique_id=1156107802]
+
+[node name="Pillar" type="MeshInstance3D" parent="Obstacles" unique_id=1833631588 groups=["obstacles"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.94, -0.52)
+material_override = SubResource("obstacle_mat")
+mesh = SubResource("pillar_mesh")
+
+[node name="Block" type="MeshInstance3D" parent="Obstacles" unique_id=1741854821 groups=["obstacles"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16, 0.88, -0.45)
+material_override = SubResource("obstacle_mat")
+mesh = SubResource("block_mesh")
+
+[node name="Target" type="Node3D" parent="." unique_id=627924243]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22955, 1.4296, -0.75)
+
+[node name="OuterMesh" type="MeshInstance3D" parent="Target" unique_id=1655934572]
+material_override = SubResource("target_mat")
+mesh = SubResource("SphereMesh_ig7tw")
+
+[node name="InnerMesh" type="MeshInstance3D" parent="Target/OuterMesh" unique_id=405420548]
+transform = Transform3D(0.87, 0, 0, 0, 0.87, 0, 0, 0, 0.87, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_0xm2m")
+mesh = SubResource("target_mesh")
+
+[node name="ArmGhost" parent="." unique_id=1368359257 instance=ExtResource("1_fbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, -0.75)
+
+[node name="ArmSolid" parent="." unique_id=2147204459 instance=ExtResource("1_fbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, -0.75)
+
+[node name="Screen" type="Node3D" parent="." unique_id=1689325039]
+transform = Transform3D(0.45447, 0.337224, -0.824461, 0, 0.925569, 0.378579, 0.890762, -0.172053, 0.420644, 0.98, 1.05, -0.5)
+
+[node name="Frame" type="MeshInstance3D" parent="Screen" unique_id=836317613]
+material_override = SubResource("screen_mat")
+mesh = SubResource("screen_mesh")
+
+[node name="SubViewport" type="SubViewport" parent="Screen" unique_id=1751951395]
+disable_3d = true
+size = Vector2i(512, 320)
+render_target_update_mode = 4
+
+[node name="UI" type="Control" parent="Screen/SubViewport" unique_id=1860135398]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DesktopCamera" type="Camera3D" parent="." unique_id=1503592995]
+transform = Transform3D(0.993533, 0.052418, -0.100723, 0, 0.887064, 0.461647, 0.113547, -0.458662, 0.881327, 0, 1.55, 0.4)
+
+[node name="XROrigin3D" type="XROrigin3D" parent="." unique_id=30025525]
+current = true
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D" unique_id=61939855]
+
+[node name="LeftHand" type="XRController3D" parent="XROrigin3D" unique_id=723169133]
+tracker = &"/user/hand/left"
+
+[node name="RightHand" type="XRController3D" parent="XROrigin3D" unique_id=56768880]
+tracker = &"/user/hand/right"
