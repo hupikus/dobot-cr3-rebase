@@ -18,6 +18,10 @@ config/icon="res://icon.svg"
 [debug]
 
 gdscript/warnings/unused_variable=0
+gdscript/warnings/unused_local_constant=0
+gdscript/warnings/unused_private_class_variable=0
+gdscript/warnings/unused_parameter=0
+gdscript/warnings/unused_signal=0
 gdscript/warnings/assert_always_true=0
 
 [display]
@@ -32,3 +36,7 @@ window/stretch/aspect="expand"
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+
+[xr]
+
+shaders/enabled=true

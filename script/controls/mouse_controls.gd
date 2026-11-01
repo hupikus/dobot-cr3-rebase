@@ -1,11 +1,14 @@
 extends Node
 
-var enabled = true
+var enabled = false
 
-@onready var target: Node3D = $"../Target"
-@onready var screen_node: Node3D = $"../Screen"
-@onready var desktop_camera: Camera3D = $"../DesktopCamera"
-@onready var sub_viewport: SubViewport = $"../Screen/SubViewport"
+@onready var ghost: DobotCR3 = $"../../ArmGhost"
+@onready var solid: DobotCR3 = $"../../ArmSolid"
+
+@onready var target: Node3D = $"../../Target"
+@onready var screen_node: Node3D = $"../../Screen"
+@onready var desktop_camera: Camera3D = $"../../DesktopCamera"
+@onready var sub_viewport: SubViewport = $"../../Screen/SubViewport"
 
 @export var screen_size := Vector2(0.72, 0.45)
 
@@ -32,6 +35,7 @@ func _ready() -> void:
 	if enabled: enable()
 
 func enable() -> void:
+	enabled = true
 	desktop_camera.current = true
 	create_gizmo()
 	update_camera()

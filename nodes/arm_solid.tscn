@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://c1bx1qcflef0g"]
 
-[ext_resource type="Script" uid="uid://dllxoj03du823" path="res://script/dobot_cr3/joints.gd" id="1_42tbx"]
+[ext_resource type="Script" uid="uid://dllxoj03du823" path="res://script/dobot_cr3/handle.gd" id="1_42tbx"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j6wyg"]
 resource_name = "mat_0.001"

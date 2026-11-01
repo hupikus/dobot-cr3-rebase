@@ -1,10 +1,12 @@
 [gd_scene format=3 uid="uid://cyx0q1uy8x5lg"]
 
 [ext_resource type="Material" uid="uid://6b6ynmxbx3py" path="res://materials/outer_mesh.tres" id="1_h2yge"]
-[ext_resource type="Script" uid="uid://r167skqi13tx" path="res://script/ui/mouse_controls.gd" id="1_lquwl"]
+[ext_resource type="Script" uid="uid://r167skqi13tx" path="res://script/controls/mouse_controls.gd" id="1_lquwl"]
 [ext_resource type="Material" uid="uid://sxdbor6lgd4s" path="res://materials/inner_mesh.tres" id="2_1bvp3"]
+[ext_resource type="Script" uid="uid://b2wh4tpkbf7nm" path="res://script/controls/xr.gd" id="2_7mycd"]
 [ext_resource type="PackedScene" uid="uid://bsa5tua42yenc" path="res://nodes/arm_ghost.tscn" id="3_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://c1bx1qcflef0g" path="res://nodes/arm_solid.tscn" id="4_lquwl"]
+[ext_resource type="Script" uid="uid://dllxoj03du823" path="res://script/dobot_cr3/handle.gd" id="6_272bh"]
 
 [sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
 
@@ -57,8 +59,13 @@ size = Vector2(0.72, 0.45)
 
 [node name="Grid" type="Node3D" parent="Effects" unique_id=1855080120]
 
-[node name="MouseControls" type="Node3D" parent="." unique_id=21186993]
+[node name="Controls" type="Node3D" parent="." unique_id=1655344952]
+
+[node name="MouseControls" type="Node3D" parent="Controls" unique_id=21186993]
 script = ExtResource("1_lquwl")
+
+[node name="XR" type="Node3D" parent="Controls" unique_id=767765804]
+script = ExtResource("2_7mycd")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1417810211]
 environment = SubResource("env")
@@ -84,12 +91,12 @@ shape = SubResource("table_shape")
 [node name="Obstacles" type="Node3D" parent="." unique_id=1156107802]
 
 [node name="Pillar" type="MeshInstance3D" parent="Obstacles" unique_id=1833631588 groups=["obstacles"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.94, -0.52)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.8596876, -0.52)
 material_override = SubResource("obstacle_mat")
 mesh = SubResource("pillar_mesh")
 
 [node name="Block" type="MeshInstance3D" parent="Obstacles" unique_id=1741854821 groups=["obstacles"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16, 0.88, -0.45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.29846945, 0.89360774, -0.45)
 material_override = SubResource("obstacle_mat")
 mesh = SubResource("block_mesh")
 
@@ -108,6 +115,7 @@ mesh = SubResource("target_mesh")
 
 [node name="ArmGhost" parent="." unique_id=1031545588 instance=ExtResource("3_1bvp3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, -0.75)
+script = ExtResource("6_272bh")
 
 [node name="ArmSolid" parent="." unique_id=1296330062 instance=ExtResource("4_lquwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, -0.75)
