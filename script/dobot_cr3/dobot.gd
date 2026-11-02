@@ -31,12 +31,12 @@ var joint_axes = [AXIS_Z, AXIS_X, AXIS_X, AXIS_X, AXIS_Z, AXIS_X]
 var joint_weights = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
 
 const JOINT_LIMITS: Array[Vector2] = [
-	Vector2(-6.28, 6.28),   # J1
-	Vector2(-6.28, 6.28),   # J2
+	Vector2(-PI*2, PI*2),   # J1
+	Vector2(-PI*2, PI*2),   # J2
 	Vector2(-2.705, 2.705), # J3
-	Vector2(-6.28, 6.28),   # J4
-	Vector2(-6.28, 6.28),   # J5
-	Vector2(-6.28, 6.28),   # J6
+	Vector2(-PI*2, PI*2),   # J4
+	Vector2(-PI*2, PI*2),   # J5
+	Vector2(-PI*2, PI*2),   # J6
 ]
 
 var joint_angles := PackedFloat32Array()
@@ -121,6 +121,11 @@ func move_to_state(angles: PackedFloat32Array, speed: float = -1.0) -> void:
 		#move_finished.emit()
 		return
 	is_transitioning = true
+
+func get_angles() -> PackedFloat32Array:
+	for i in range(JOINTS_LEN):
+		joint_angles[i] = joints[i].rotation[joint_axes[i]]
+	return joint_angles
 
 func apply_joint_angles(angles: PackedFloat32Array) -> void:
 	is_transitioning = false

@@ -35,8 +35,7 @@ void fragment() {
 	float line = 1.0 - smoothstep(0.02, 0.035, g);
 	col = mix(col, grid_color, line * fade * 0.7);
 
-	// Subtle grain to avoid a flat, banded look.
-	col += (hash(p * 90.0) - 0.5) * 0.004;
+	col += (hash(p * 90.0) - 0.5) * 0.001;
 
 	ALBEDO = col;
 }

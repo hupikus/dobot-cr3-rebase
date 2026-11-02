@@ -12,9 +12,9 @@ var enabled = false
 
 @onready var desktop_controls: Node3D = $"../MouseControls"
 
-@onready var screen: Node3D = $"../../Screen"
-@onready var screen_frame: MeshInstance3D = $"../../Screen/Frame"
-@onready var subviewport: SubViewport = $"../../Screen/SubViewport"
+@onready var screen: Node3D = $"../../Screens/Screen"
+@onready var screen_frame: MeshInstance3D = $"../../Screens/Screen/Frame"
+@onready var subviewport: SubViewport = $"../../Screens/Screen/SubViewport"
 
 @onready var target: Node3D = $"../../Target"
 @onready var xr_origin: XROrigin3D = $"../../XROrigin3D"

@@ -2,6 +2,8 @@ extends Node
 
 @export var safe_thickness = 0.02
 
+const OBSTACLE_LAYER := 2
+
 var obstacle_material := ShaderMaterial.new()
 var shell_mat := ShaderMaterial.new()
 
@@ -22,3 +24,11 @@ func _ready() -> void:
 		
 		shell.material_override = shell_mat
 		child.add_child(shell)
+		
+		
+		child.create_trimesh_collision()
+		for om in child.get_children():
+			if om is StaticBody3D:
+				om.collision_layer = OBSTACLE_LAYER
+				om.collision_mask = 0
+				break

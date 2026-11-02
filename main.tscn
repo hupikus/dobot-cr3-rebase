@@ -9,11 +9,12 @@
 [ext_resource type="Shader" uid="uid://cbomsjly5yddc" path="res://shaders/sky.gdshader" id="3_5vw27"]
 [ext_resource type="Shader" uid="uid://ce4wxmvx0x0sq" path="res://shaders/floor.gdshader" id="4_kek77"]
 [ext_resource type="PackedScene" uid="uid://c1bx1qcflef0g" path="res://nodes/arm_solid.tscn" id="4_lquwl"]
-[ext_resource type="Shader" uid="uid://ctcnh2a1iu33d" path="res://shaders/table_outline.gdshader" id="5_efxa6"]
+[ext_resource type="Shader" uid="uid://ctcnh2a1iu33d" path="res://shaders/outline.gdshader" id="5_efxa6"]
 [ext_resource type="Script" uid="uid://dllxoj03du823" path="res://script/dobot_cr3/dobot.gd" id="6_272bh"]
+[ext_resource type="Shader" uid="uid://dxdn24u68rjvc" path="res://shaders/grid.gdshader" id="7_vivmo"]
 [ext_resource type="Script" uid="uid://dx47tytj6e84t" path="res://script/obstacles.gd" id="7_w48qg"]
 [ext_resource type="Script" uid="uid://dwvb6hx8jrkyj" path="res://script/target_runaway.gd" id="8_ycdy4"]
-[ext_resource type="Script" uid="uid://damb5tf8a4m4s" path="res://script/controls/screen.gd" id="14_w48qg"]
+[ext_resource type="Script" uid="uid://damb5tf8a4m4s" path="res://script/controls/ui_screen.gd" id="14_w48qg"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6wiwe"]
 shader = ExtResource("3_5vw27")
@@ -30,6 +31,8 @@ background_mode = 2
 sky = SubResource("sky")
 ambient_light_source = 3
 tonemap_mode = 2
+glow_enabled = true
+glow_bloom = 0.11
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4c57u"]
 render_priority = 0
@@ -65,6 +68,15 @@ albedo_color = Color(0.11207495, 0.2827793, 0.27619392, 0.18)
 
 [sub_resource type="BoxShape3D" id="table_shape"]
 size = Vector3(1.4, 0.06, 0.9)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2cqfq"]
+render_priority = 0
+shader = ExtResource("7_vivmo")
+shader_parameter/edge_color = Color(0.035, 0.04, 0.05, 1)
+shader_parameter/grid_color = Color(0.2, 0.22, 0.27, 1)
+shader_parameter/grid_spacing = 0.05
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_g4v7s"]
 
 [sub_resource type="BoxMesh" id="pillar_mesh"]
 size = Vector3(0.12, 0.4, 0.12)
@@ -112,7 +124,7 @@ light_volumetric_fog_energy = 1.296
 light_angular_distance = 52.5
 
 [node name="Floor" type="MeshInstance3D" parent="." unique_id=1461899162]
-transform = Transform3D(1, 0, 0, 0, 0.01, 0, 0, 0, 1, 0.0015357733, -0.0021389723, 0.0002875328)
+transform = Transform3D(1, 0, 0, 0, 0.01, 0, 0, 0, 1, 0, 0.1, 0)
 material_override = SubResource("ShaderMaterial_4c57u")
 mesh = SubResource("CylinderMesh_kek77")
 
@@ -131,6 +143,11 @@ mesh = SubResource("table_mesh")
 
 [node name="Collision" type="CollisionShape3D" parent="Table" unique_id=1538464604]
 shape = SubResource("table_shape")
+
+[node name="grid" type="MeshInstance3D" parent="Table" unique_id=1263370000]
+transform = Transform3D(0.6897405, 0, 0, 0, 1, 0, 0, 0, 0.44788247, 0, 0.03664708, 0)
+material_override = SubResource("ShaderMaterial_2cqfq")
+mesh = SubResource("PlaneMesh_g4v7s")
 
 [node name="Obstacles" type="Node3D" parent="." unique_id=1156107802]
 script = ExtResource("7_w48qg")
@@ -170,21 +187,24 @@ script = ExtResource("6_272bh")
 [node name="ArmSolid" parent="." unique_id=1296330062 instance=ExtResource("4_lquwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, -0.75)
 
-[node name="Screen" type="Node3D" parent="." unique_id=1689325039]
+[node name="Screens" type="Node3D" parent="." unique_id=1941604643]
 transform = Transform3D(0.45447, 0.337224, -0.824461, 0, 0.925569, 0.378579, 0.890762, -0.172053, 0.420644, 0.98, 1.05, -0.5)
+
+[node name="Screen" type="Node3D" parent="Screens" unique_id=1689325039]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 2.9802322e-08, 0, 1, 0, 0, 0)
 script = ExtResource("14_w48qg")
 
-[node name="Frame" type="MeshInstance3D" parent="Screen" unique_id=836317613]
+[node name="Frame" type="MeshInstance3D" parent="Screens/Screen" unique_id=836317613]
 transform = Transform3D(1.3925574, 0, 0, 0, -0.22504291, -1.3742532, 0, 1.3742533, -0.2250429, 0, 0, 0)
 material_override = SubResource("screen_mat")
 mesh = SubResource("PlaneMesh_7mycd")
 
-[node name="SubViewport" type="SubViewport" parent="Screen" unique_id=1751951395]
+[node name="SubViewport" type="SubViewport" parent="Screens/Screen" unique_id=1751951395]
 disable_3d = true
 size = Vector2i(512, 320)
 render_target_update_mode = 4
 
-[node name="UI" type="Control" parent="Screen/SubViewport" unique_id=1860135398]
+[node name="UI" type="Control" parent="Screens/Screen/SubViewport" unique_id=1860135398]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

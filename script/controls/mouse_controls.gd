@@ -6,9 +6,9 @@ var enabled = false
 @onready var solid: DobotCR3 = $"../../ArmSolid"
 
 @onready var target: Node3D = $"../../Target"
-@onready var screen_node: Node3D = $"../../Screen"
+@onready var screen_node: Node3D = $"../../Screens/Screen"
 @onready var desktop_camera: Camera3D = $"../../DesktopCamera"
-@onready var sub_viewport: SubViewport = $"../../Screen/SubViewport"
+@onready var subviewport: SubViewport = $"../../Screens/Screen/SubViewport"
 
 @export var screen_size := Vector2(0.72, 0.45)
 
@@ -201,7 +201,7 @@ func nearest_handle(hand: XRController3D) -> int:
 
 
 func click_screen(uv: Vector2) -> void:
-	var vp_size = Vector2(sub_viewport.size)
+	var vp_size = Vector2(subviewport.size)
 	var pos := Vector2(uv.x * vp_size.x, uv.y * vp_size.y)
 	for pressed in [true, false]:
 		var event := InputEventMouseButton.new()
@@ -211,7 +211,7 @@ func click_screen(uv: Vector2) -> void:
 		event.global_position = pos
 		if pressed:
 			event.button_mask = MOUSE_BUTTON_MASK_LEFT
-		sub_viewport.push_input(event, true)
+		subviewport.push_input(event, true)
 
 var colors := [Color(1, 0.3, 0.3), Color(0.35, 1, 0.45), Color(0.4, 0.6, 1)]
 var rots := [Vector3(0, 0, -90), Vector3.ZERO, Vector3(90, 0, 0)]
@@ -284,7 +284,7 @@ func pick_axis(from: Vector3, dir: Vector3) -> int:
 	for i in range(3):
 		var axis = axis_vector(i)
 		var s = closest_line_param(target.global_position, axis, from, dir)
-		if is_nan(s) or s < -0.002 or s > gizmo_length + 0.006:
+		if is_nan(s) or s < -0.002 or s > gizmo_length + 0.06:
 			continue
 		var point = target.global_position + axis * s
 		var t = (point - from).dot(dir)
