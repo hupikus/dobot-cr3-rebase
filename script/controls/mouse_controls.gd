@@ -15,6 +15,11 @@ var enabled = false
 @export var grab_distance: float = 0.16
 @export var handle_grab_distance: float = 0.08
 
+@export var zoom_step := 0.12
+@export var zoom_min := 0.28
+@export var zoom_max := 4.0
+@export var focus_distance = 0.8
+
 ## Pan speed per pixel, multiplied by camera distance.
 @export var pan_sensitivity: float = 0.0016
 
@@ -27,16 +32,17 @@ var _desktop_dragging = false
 
 var _desktop_plane = Plane()
 var gizmo: Node3D = null
+
 var _dragging_axis := -1
 var _axis_drag_start := Vector3.ZERO
 var _axis_drag_param0 := 0.0
 var _right_dragging := false
 var _middle_dragging := false
+
 var _cam_pivot := Vector3(0.1, 0.95, -0.62)
 var _cam_yaw := 0.0
 var _cam_pitch := 0.32
 var _cam_distance := 1.9
-
 
 func _ready() -> void:
 	if enabled: enable()
@@ -81,6 +87,19 @@ func _unhandled_input(event: InputEvent) -> void:
 		_cam_yaw -= motion.relative.x * 0.006
 		_cam_pitch = clampf(_cam_pitch + motion.relative.y * 0.006, -0.2, 1.35)
 		update_camera()
+	elif event is InputEventMouseMotion and _middle_dragging:
+		pan_camera((event as InputEventMouseMotion).relative)
+	elif event is InputEventKey and event.pressed and event.keycode == KEY_F:
+		_cam_pivot = target.global_position
+		_cam_distance = focus_distance
+		update_camera()
+
+func pan_camera(vec: Vector2) -> void:
+	var basis := desktop_camera.global_transform.basis
+	var scale := _cam_distance * pan_sensitivity
+	_cam_pivot += basis.x * (-vec.x * scale)
+	_cam_pivot += basis.y * ( vec.y * scale)
+	update_camera()
 
 func check_screen_click() -> void:
 	var mp = get_viewport().get_mouse_position()
@@ -128,12 +147,38 @@ func handle_mouse_button(event: InputEventMouseButton) -> void:
 			_middle_dragging = event.pressed
 		MOUSE_BUTTON_WHEEL_UP:
 			if event.pressed:
-				_cam_distance = clampf(_cam_distance - 0.12, 0.6, 5.0)
+				#_cam_distance = clampf(_cam_distance - zoom_step, zoom_min, zoom_max)
+				zoom(-zoom_step)
 				update_camera()
 		MOUSE_BUTTON_WHEEL_DOWN:
 			if event.pressed:
-				_cam_distance = clampf(_cam_distance + 0.12, 0.6, 5.0)
+				#_cam_distance = clampf(_cam_distance + zoom_step, zoom_min, zoom_max)
+				zoom(zoom_step)
 				update_camera()
+
+func zoom(delta: float) -> void:
+	var mp := get_viewport().get_mouse_position()
+	var from := desktop_camera.project_ray_origin(mp)
+	var dir := desktop_camera.project_ray_normal(mp)
+
+	# Plane through the pivot, facing the camera — "everything at pivot depth".
+	var plane := Plane(-desktop_camera.global_transform.basis.z, _cam_pivot)
+	var hit: Variant = plane.intersects_ray(from, dir)
+
+	var d_old := _cam_distance
+	var d_new := clampf(d_old + delta, 0.6, 5.0)
+
+	if hit == null:
+		_cam_distance = d_new
+		update_camera()
+		return
+
+	# Scale pivot toward the cursor hit by the same ratio the camera moves.
+	# This keeps `hit` fixed on screen.
+	var ratio := d_new / d_old
+	_cam_pivot = (hit as Vector3) + (_cam_pivot - (hit as Vector3)) * ratio
+	_cam_distance = d_new
+	update_camera()
 
 func ray_hits_target(from: Vector3, dir: Vector3) -> bool:
 	var to := target.global_position - from
@@ -239,7 +284,7 @@ func pick_axis(from: Vector3, dir: Vector3) -> int:
 	for i in range(3):
 		var axis = axis_vector(i)
 		var s = closest_line_param(target.global_position, axis, from, dir)
-		if is_nan(s) or s < -0.02 or s > gizmo_length + 0.06:
+		if is_nan(s) or s < -0.002 or s > gizmo_length + 0.006:
 			continue
 		var point = target.global_position + axis * s
 		var t = (point - from).dot(dir)

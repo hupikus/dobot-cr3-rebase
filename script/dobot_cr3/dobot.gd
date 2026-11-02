@@ -27,7 +27,18 @@ var axis_vector = [Vector3.RIGHT, Vector3.UP, Vector3.FORWARD]
 var joint_axes = [AXIS_Z, AXIS_X, AXIS_X, AXIS_X, AXIS_Z, AXIS_X]
 var joint_weights = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
 
-var report_rotation = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+const JOINT_LIMITS: Array[Vector2] = [
+	Vector2(-6.28, 6.28),   # J1
+	Vector2(-6.28, 6.28),   # J2
+	Vector2(-2.705, 2.705), # J3
+	Vector2(-6.28, 6.28),   # J4
+	Vector2(-6.28, 6.28),   # J5
+	Vector2(-6.28, 6.28),   # J6
+]
+
+var joint_angles := PackedFloat32Array()
+var default_angles := PackedFloat32Array()
+var reached := false
 
 
 func rotate_joint(joint: int, turn_degree: float) -> void:
@@ -54,7 +65,9 @@ func do_ik() -> void:
 		for joint in range(5, -1, -1):
 			var distance_old := quadratic_distance_to_target()
 			if distance_old < target_distance:
+				reached = true
 				return
+			reached = false
 			
 			# Check distances when rotated right and when rotated left
 			rotate_joint(joint, step_angle)
@@ -67,3 +80,6 @@ func do_ik() -> void:
 				continue
 			
 			rotate_joint(joint, step_angle if distance_right < distance_left else -step_angle)
+
+func check_colliding() -> bool:
+	return false
