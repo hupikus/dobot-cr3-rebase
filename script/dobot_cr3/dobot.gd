@@ -1,6 +1,7 @@
 class_name DobotCR3
 extends Node
 
+@export var target_distance: float = 0.0015
 ## Step angle per one iteration
 @export var step_angle: float = 0.001
 ## Max iterations per one frame
@@ -52,6 +53,9 @@ func do_ik() -> void:
 	for i in range(max_iterations):
 		for joint in range(5, -1, -1):
 			var distance_old := quadratic_distance_to_target()
+			if distance_old < target_distance:
+				return
+			
 			# Check distances when rotated right and when rotated left
 			rotate_joint(joint, step_angle)
 			var distance_right := quadratic_distance_to_target()

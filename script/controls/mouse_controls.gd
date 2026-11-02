@@ -14,21 +14,28 @@ var enabled = false
 
 @export var grab_distance: float = 0.16
 @export var handle_grab_distance: float = 0.08
-var _handles: Array[MeshInstance3D] = []
+
+## Pan speed per pixel, multiplied by camera distance.
+@export var pan_sensitivity: float = 0.0016
+
+var gizmo_length = 0.22
+
+@onready var ghost_model = $"../../ArmGhost/CR3A_ASM"
+@onready var _handles = ghost_model.handles
 
 var _desktop_dragging = false
 
 var _desktop_plane = Plane()
-var _gizmo: Node3D = null
-var _gizmo_length = 0.22
-var _dragging_axis = -1
-var _axis_drag_start = Vector3.ZERO
-var _axis_drag_param0 = 0.0
-var _right_dragging = false
-var _cam_pivot = Vector3(0.1, 0.95, -0.62)
-var _cam_yaw = 0.0
-var _cam_pitch = 0.32
-var _cam_distance = 1.9
+var gizmo: Node3D = null
+var _dragging_axis := -1
+var _axis_drag_start := Vector3.ZERO
+var _axis_drag_param0 := 0.0
+var _right_dragging := false
+var _middle_dragging := false
+var _cam_pivot := Vector3(0.1, 0.95, -0.62)
+var _cam_yaw := 0.0
+var _cam_pitch := 0.32
+var _cam_distance := 1.9
 
 
 func _ready() -> void:
@@ -44,6 +51,8 @@ func _process(delta) -> void:
 	if enabled:
 		update_camera()
 		update_desktop_input(delta)
+		if gizmo:
+			gizmo.global_position = target.global_position
 
 func update_desktop_input(_delta: float) -> void:
 	var mp = get_viewport().get_mouse_position()
@@ -115,6 +124,8 @@ func handle_mouse_button(event: InputEventMouseButton) -> void:
 				_desktop_dragging = false
 		MOUSE_BUTTON_RIGHT:
 			_right_dragging = event.pressed
+		MOUSE_BUTTON_MIDDLE:
+			_middle_dragging = event.pressed
 		MOUSE_BUTTON_WHEEL_UP:
 			if event.pressed:
 				_cam_distance = clampf(_cam_distance - 0.12, 0.6, 5.0)
@@ -157,29 +168,33 @@ func click_screen(uv: Vector2) -> void:
 			event.button_mask = MOUSE_BUTTON_MASK_LEFT
 		sub_viewport.push_input(event, true)
 
+var colors := [Color(1, 0.3, 0.3), Color(0.35, 1, 0.45), Color(0.4, 0.6, 1)]
+var rots := [Vector3(0, 0, -90), Vector3.ZERO, Vector3(90, 0, 0)]
 func create_gizmo() -> void:
-	_gizmo = Node3D.new()
-	_gizmo.name = "TargetGizmo"
-	add_child(_gizmo)
-	var colors := [Color(1, 0.3, 0.3), Color(0.35, 1, 0.45), Color(0.4, 0.6, 1)]
-	var rots := [Vector3(0, 0, -90), Vector3.ZERO, Vector3(90, 0, 0)]
+	gizmo = Node3D.new()
+	gizmo.name = "TargetGizmo"
+	add_child(gizmo)
+	
 	for i in range(3):
 		var axis_node := Node3D.new()
 		axis_node.rotation_degrees = rots[i]
-		_gizmo.add_child(axis_node)
+		gizmo.add_child(axis_node)
+		
 		var mat := StandardMaterial3D.new()
 		mat.albedo_color = colors[i]
 		mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 		mat.no_depth_test = true
+		
 		var shaft := MeshInstance3D.new()
 		var cyl := CylinderMesh.new()
 		cyl.top_radius = 0.006
 		cyl.bottom_radius = 0.006
-		cyl.height = _gizmo_length
+		cyl.height = gizmo_length
 		shaft.mesh = cyl
 		shaft.material_override = mat
-		shaft.position = Vector3(0, _gizmo_length * 0.5, 0)
+		shaft.position = Vector3(0, gizmo_length * 0.5, 0)
 		axis_node.add_child(shaft)
+		
 		var tip := MeshInstance3D.new()
 		var cone := CylinderMesh.new()
 		cone.top_radius = 0.0
@@ -187,7 +202,7 @@ func create_gizmo() -> void:
 		cone.height = 0.05
 		tip.mesh = cone
 		tip.material_override = mat
-		tip.position = Vector3(0, _gizmo_length + 0.025, 0)
+		tip.position = Vector3(0, gizmo_length + 0.025, 0)
 		axis_node.add_child(tip)
 
 
@@ -224,7 +239,7 @@ func pick_axis(from: Vector3, dir: Vector3) -> int:
 	for i in range(3):
 		var axis = axis_vector(i)
 		var s = closest_line_param(target.global_position, axis, from, dir)
-		if is_nan(s) or s < -0.02 or s > _gizmo_length + 0.06:
+		if is_nan(s) or s < -0.02 or s > gizmo_length + 0.06:
 			continue
 		var point = target.global_position + axis * s
 		var t = (point - from).dot(dir)

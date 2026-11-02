@@ -9,10 +9,11 @@
 [ext_resource type="Shader" uid="uid://cbomsjly5yddc" path="res://shaders/sky.gdshader" id="3_5vw27"]
 [ext_resource type="Shader" uid="uid://ce4wxmvx0x0sq" path="res://shaders/floor.gdshader" id="4_kek77"]
 [ext_resource type="PackedScene" uid="uid://c1bx1qcflef0g" path="res://nodes/arm_solid.tscn" id="4_lquwl"]
-[ext_resource type="Shader" uid="uid://sel3bua65tve" path="res://shaders/obstacle_mesh.gdshader" id="5_4c57u"]
 [ext_resource type="Shader" uid="uid://ctcnh2a1iu33d" path="res://shaders/table_outline.gdshader" id="5_efxa6"]
 [ext_resource type="Script" uid="uid://dllxoj03du823" path="res://script/dobot_cr3/dobot.gd" id="6_272bh"]
+[ext_resource type="Script" uid="uid://dx47tytj6e84t" path="res://script/obstacles.gd" id="7_w48qg"]
 [ext_resource type="Script" uid="uid://dwvb6hx8jrkyj" path="res://script/target_runaway.gd" id="8_ycdy4"]
+[ext_resource type="Script" uid="uid://damb5tf8a4m4s" path="res://script/controls/screen.gd" id="14_w48qg"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6wiwe"]
 shader = ExtResource("3_5vw27")
@@ -64,30 +65,8 @@ albedo_color = Color(0.11207495, 0.2827793, 0.27619392, 0.18)
 [sub_resource type="BoxShape3D" id="table_shape"]
 size = Vector3(1.4, 0.06, 0.9)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_efxa6"]
-render_priority = 0
-shader = ExtResource("5_4c57u")
-shader_parameter/base_color = Color(0.42, 0.15, 0.11, 1)
-shader_parameter/rim_color = Color(1, 0.55, 0.35, 1)
-shader_parameter/scan_color = Color(1, 0.72, 0.5, 1)
-shader_parameter/rim_power = 2.5
-shader_parameter/scan_density = 7.0
-shader_parameter/scan_speed = 0.35
-shader_parameter/scan_strength = 0.35
-
 [sub_resource type="BoxMesh" id="pillar_mesh"]
 size = Vector3(0.12, 0.4, 0.12)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dg77c"]
-render_priority = 0
-shader = ExtResource("5_4c57u")
-shader_parameter/base_color = Color(0.42, 0.15, 0.11, 1)
-shader_parameter/rim_color = Color(1, 0.55, 0.35, 1)
-shader_parameter/scan_color = Color(1, 0.72, 0.5, 1)
-shader_parameter/rim_power = 2.5
-shader_parameter/scan_density = 7.0
-shader_parameter/scan_speed = 0.35
-shader_parameter/scan_strength = 0.35
 
 [sub_resource type="BoxMesh" id="block_mesh"]
 size = Vector3(0.22, 0.16, 0.22)
@@ -153,15 +132,14 @@ mesh = SubResource("table_mesh")
 shape = SubResource("table_shape")
 
 [node name="Obstacles" type="Node3D" parent="." unique_id=1156107802]
+script = ExtResource("7_w48qg")
 
 [node name="Pillar" type="MeshInstance3D" parent="Obstacles" unique_id=1833631588 groups=["obstacles"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.8596876, -0.52)
-material_override = SubResource("ShaderMaterial_efxa6")
 mesh = SubResource("pillar_mesh")
 
 [node name="Block" type="MeshInstance3D" parent="Obstacles" unique_id=1741854821 groups=["obstacles"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.29846945, 0.89360774, -0.45)
-material_override = SubResource("ShaderMaterial_dg77c")
 mesh = SubResource("block_mesh")
 
 [node name="Target" type="Node3D" parent="." unique_id=627924243]
@@ -193,6 +171,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, -0.75)
 
 [node name="Screen" type="Node3D" parent="." unique_id=1689325039]
 transform = Transform3D(0.45447, 0.337224, -0.824461, 0, 0.925569, 0.378579, 0.890762, -0.172053, 0.420644, 0.98, 1.05, -0.5)
+script = ExtResource("14_w48qg")
 
 [node name="Frame" type="MeshInstance3D" parent="Screen" unique_id=836317613]
 transform = Transform3D(1.3925574, 0, 0, 0, -0.22504291, -1.3742532, 0, 1.3742533, -0.2250429, 0, 0, 0)
