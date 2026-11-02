@@ -1,6 +1,8 @@
 class_name DobotCR3
 extends Node
 
+const EPSILON = 0.0001
+
 @export var target_distance: float = 0.0015
 ## Step angle per one iteration
 @export var step_angle: float = 0.001
@@ -12,6 +14,7 @@ var target: Node3D = null
 @export var active_solve: bool = true
 @export var default_speed: float = 0.6
 
+const JOINTS_LEN = 6
 @onready var joints: Array[Node3D] = [
 	$"CR3A_ASM/CR3-BASE/CR3_J1",
 	$"CR3A_ASM/CR3-BASE/CR3_J1/LINK2-CR3A",
@@ -40,6 +43,22 @@ var joint_angles := PackedFloat32Array()
 var default_angles := PackedFloat32Array()
 var reached := false
 
+## The list of joints edited by hand; resets after approval
+var pinned := PackedByteArray()
+
+## Is manipulator transitioning from one position to another
+var is_transitioning := false
+var moving_from := PackedFloat32Array()
+var moving_to := PackedFloat32Array()
+var move_elapsed := 0.0
+var move_duration := 0.0
+
+func _ready() -> void:
+	joint_angles.resize(JOINTS_LEN)
+	joint_angles.fill(0.0)
+	default_angles = joint_angles.duplicate()
+	pinned.resize(JOINTS_LEN)
+	pinned.fill(0)
 
 func rotate_joint(joint: int, turn_degree: float) -> void:
 	if joint < 0: return
@@ -81,5 +100,32 @@ func do_ik() -> void:
 			
 			rotate_joint(joint, step_angle if distance_right < distance_left else -step_angle)
 
-func check_colliding() -> bool:
-	return false
+func move_to_state(angles: PackedFloat32Array, speed: float = -1.0) -> void:
+	var goal := PackedFloat32Array()
+	goal.resize(joints.size())
+	for i in range(joints.size()):
+		var a: float = angles[i] if i < angles.size() else joint_angles[i]
+		goal[i] = clampf(a, JOINT_LIMITS[i].x, JOINT_LIMITS[i].y)
+
+	var use_speed: float = speed if speed > 0.0 else default_speed
+	moving_from = joint_angles.duplicate()
+	moving_to = goal
+	move_elapsed = 0.0
+	var max_delta := 0.0
+	for i in range(joints.size()):
+		max_delta = maxf(max_delta, absf(goal[i] - moving_from[i]))
+	move_duration = max_delta / use_speed if use_speed > 0.0 else 0.0
+
+	if move_duration <= EPSILON:
+		apply_joint_angles(goal)
+		#move_finished.emit()
+		return
+	is_transitioning = true
+
+func apply_joint_angles(angles: PackedFloat32Array) -> void:
+	is_transitioning = false
+	for i in range(joints.size()):
+		if i >= angles.size():
+			break
+		rotate_joint(i, angles[i] - joint_angles[i])
+	reached = false

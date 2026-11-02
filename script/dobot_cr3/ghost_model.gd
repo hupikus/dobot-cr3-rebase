@@ -15,12 +15,14 @@ extends Node
 	$"CR3-BASE/CR3_J1/LINK2-CR3A/CR3_J3/CR3_J4/CR3_J5",
 	$"CR3-BASE/CR3_J1/LINK2-CR3A/CR3_J3/CR3_J4/CR3_J5/CR3-J6_CR3_2__CR30001_1_2",
 ]
+@onready var obstacle = $"../../Obstacles"
+@onready var obstacles = obstacle.get_children()
+var colliding := false
 
 var handles: Array[Node3D]
 
 var base_material := StandardMaterial3D.new()
 var handle_material := StandardMaterial3D.new()
-
 
 var sphere := SphereMesh.new()
 
@@ -49,4 +51,27 @@ func create_handles() -> void:
 		handles.append(handle)
 
 func _process(delta: float) -> void:
-	pass
+	update_collisions()
+
+func update_collisions() -> void:
+	var any := false
+	for gm in meshes:
+		if not is_instance_valid(gm):
+			continue
+		var ga: AABB = gm.global_transform * gm.get_aabb()
+		for om in obstacles:
+			if not is_instance_valid(om):
+				continue
+			var oa: AABB = om.global_transform * om.get_aabb()
+			# Collision volume is extebded by the thicknesss
+			oa = oa.grow(obstacle.safe_thickness)
+			if ga.intersects(oa):
+				any = true
+				break
+		if any:
+			break
+	if any != colliding:
+		colliding = any
+		base_material.albedo_color = base_color_error if any else base_color
+
+	#screen_ui.set_collision(any)
