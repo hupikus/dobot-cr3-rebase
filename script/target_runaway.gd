@@ -1,4 +1,4 @@
-extends Node
+extends Node3D
 
-#func _process(delta: float) -> void:
-	#position.y += 0.03
+func _process(delta: float) -> void:
+	position.z += 0.003

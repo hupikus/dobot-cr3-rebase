@@ -5,9 +5,9 @@ extends Node
 @onready var target = $Target
 
 func _ready() -> void:
-	solid.target = target
-	solid.active_solve = true
+	solid.active_solve = false
 	ghost.active_solve = true
+	ghost.target = target
 
 
 func _process(delta: float) -> void:

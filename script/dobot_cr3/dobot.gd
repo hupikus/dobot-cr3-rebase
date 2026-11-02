@@ -2,9 +2,9 @@ class_name DobotCR3
 extends Node
 
 ## Step angle per one iteration
-@export var step_angle: float = 0.05
+@export var step_angle: float = 0.001
 ## Max iterations per one frame
-@export var max_iterations: int = 20
+@export var max_iterations: int = 40
 
 ## Whether to move in real-time
 var target: Node3D = null
@@ -49,19 +49,17 @@ func quadratic_distance_to_target() -> float:
 
 func do_ik() -> void:
 	if target == null: return
-	var distance_old := quadratic_distance_to_target()
-	
-	var i := 0
-	for joint in range(0, 5):
-		
-		# Check distances when rotated right and when rotated left
-		rotate_joint(i, step_angle)
-		var distance_right := quadratic_distance_to_target()
-		rotate_joint(i, -2 * step_angle)
-		var distance_left := quadratic_distance_to_target()
-		rotate_joint(i, step_angle)
-		
-		if distance_old <= distance_left && distance_old <= distance_right:
-			continue
-		
-		rotate_joint(i, step_angle if distance_right < distance_left else -step_angle)
+	for i in range(max_iterations):
+		for joint in range(5, -1, -1):
+			var distance_old := quadratic_distance_to_target()
+			# Check distances when rotated right and when rotated left
+			rotate_joint(joint, step_angle)
+			var distance_right := quadratic_distance_to_target()
+			rotate_joint(joint, -2 * step_angle)
+			var distance_left := quadratic_distance_to_target()
+			rotate_joint(joint, step_angle)
+			
+			if distance_old <= distance_left && distance_old <= distance_right:
+				continue
+			
+			rotate_joint(joint, step_angle if distance_right < distance_left else -step_angle)

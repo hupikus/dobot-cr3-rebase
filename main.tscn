@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://c1bx1qcflef0g" path="res://nodes/arm_solid.tscn" id="4_lquwl"]
 [ext_resource type="Shader" uid="uid://sel3bua65tve" path="res://shaders/obstacle_mesh.gdshader" id="5_4c57u"]
 [ext_resource type="Shader" uid="uid://ctcnh2a1iu33d" path="res://shaders/table_outline.gdshader" id="5_efxa6"]
-[ext_resource type="Script" uid="uid://dllxoj03du823" path="res://script/dobot_cr3/handle.gd" id="6_272bh"]
+[ext_resource type="Script" uid="uid://dllxoj03du823" path="res://script/dobot_cr3/dobot.gd" id="6_272bh"]
 [ext_resource type="Script" uid="uid://dwvb6hx8jrkyj" path="res://script/target_runaway.gd" id="8_ycdy4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6wiwe"]
