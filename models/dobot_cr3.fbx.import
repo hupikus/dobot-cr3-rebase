@@ -4,12 +4,11 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://buqsepov5w5um"
-path="res://.godot/imported/dobot_cr3.fbx-5075f2905705a52547e9221ef9c5fcf0.scn"
+valid=false
 
 [deps]
 
 source_file="res://models/dobot_cr3.fbx"
-dest_files=["res://.godot/imported/dobot_cr3.fbx-5075f2905705a52547e9221ef9c5fcf0.scn"]
 
 [params]
 

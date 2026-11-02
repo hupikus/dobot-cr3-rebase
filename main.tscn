@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://cyx0q1uy8x5lg"]
 
+[ext_resource type="Script" uid="uid://y124g8rjp1gc" path="res://script/world.gd" id="1_dg77c"]
 [ext_resource type="Material" uid="uid://6b6ynmxbx3py" path="res://materials/outer_mesh.tres" id="1_h2yge"]
 [ext_resource type="Script" uid="uid://r167skqi13tx" path="res://script/controls/mouse_controls.gd" id="1_lquwl"]
 [ext_resource type="Material" uid="uid://sxdbor6lgd4s" path="res://materials/inner_mesh.tres" id="2_1bvp3"]
@@ -11,13 +12,14 @@
 [ext_resource type="Shader" uid="uid://sel3bua65tve" path="res://shaders/obstacle_mesh.gdshader" id="5_4c57u"]
 [ext_resource type="Shader" uid="uid://ctcnh2a1iu33d" path="res://shaders/table_outline.gdshader" id="5_efxa6"]
 [ext_resource type="Script" uid="uid://dllxoj03du823" path="res://script/dobot_cr3/handle.gd" id="6_272bh"]
+[ext_resource type="Script" uid="uid://dwvb6hx8jrkyj" path="res://script/target_runaway.gd" id="8_ycdy4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6wiwe"]
 shader = ExtResource("3_5vw27")
 shader_parameter/horizon_color = Color(0.14, 0.16, 0.2, 1)
 shader_parameter/zenith_color = Color(0.06, 0.07, 0.1, 1)
 shader_parameter/gradient_power = 0.8
-shader_parameter/grain = 0.004
+shader_parameter/grain = 0.0010000000475
 
 [sub_resource type="Sky" id="sky"]
 sky_material = SubResource("ShaderMaterial_6wiwe")
@@ -101,6 +103,7 @@ albedo_color = Color(0.1584723, 0.15847233, 0.1584723, 1)
 size = Vector2(0.72, 0.45)
 
 [node name="ManipulatorStation" type="Node3D" unique_id=1095012181]
+script = ExtResource("1_dg77c")
 
 [node name="Effects" type="Node3D" parent="." unique_id=584400388]
 
@@ -129,7 +132,7 @@ light_volumetric_fog_energy = 1.296
 light_angular_distance = 52.5
 
 [node name="Floor" type="MeshInstance3D" parent="." unique_id=1461899162]
-transform = Transform3D(100, 0, 0, 0, 1, 0, 0, 0, 100, 0, 0, 0)
+transform = Transform3D(100, 0, 0, 0, 1, 0, 0, 0, 100, 0.0015357733, -0.0021389723, 0.0002875328)
 material_override = SubResource("ShaderMaterial_4c57u")
 mesh = SubResource("CylinderMesh_kek77")
 
@@ -163,6 +166,7 @@ mesh = SubResource("block_mesh")
 
 [node name="Target" type="Node3D" parent="." unique_id=627924243]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22955, 1.4296, -0.75)
+script = ExtResource("8_ycdy4")
 
 [node name="OuterMesh" type="MeshInstance3D" parent="Target" unique_id=1655934572]
 transform = Transform3D(1.038, 0, 0, 0, 1.038, 0, 0, 0, 1.038, 0, 0, 0)

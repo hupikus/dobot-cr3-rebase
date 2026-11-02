@@ -6,7 +6,7 @@ uniform float gradient_power : hint_range(0.1, 4.0) = 0.8;
 uniform float grain : hint_range(0.0, 0.1) = 0.004;
 
 float hash(vec2 p) {
-	return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+	return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453) * 0.1 ;
 }
 
 void sky() {
