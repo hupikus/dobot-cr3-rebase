@@ -146,6 +146,7 @@ shape = SubResource("table_shape")
 
 [node name="grid" type="MeshInstance3D" parent="Table" unique_id=1263370000]
 transform = Transform3D(0.6897405, 0, 0, 0, 1, 0, 0, 0, 0.44788247, 0, 0.03664708, 0)
+visible = false
 material_override = SubResource("ShaderMaterial_2cqfq")
 mesh = SubResource("PlaneMesh_g4v7s")
 

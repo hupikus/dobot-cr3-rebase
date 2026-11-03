@@ -1,56 +1,62 @@
 class_name CollisionGeometry
 extends Node
 
-const FIELD_SIZE := Vector3(2.0, 1.0, 2.0)
+var GRADE_BOUNDS_MAX_SIZE = 0.1
+var GRADE_BOUNDS_LEVEL = 4
+var GRADE_BOUNDS_DECREASE_FACTOR: int = 2
 
-static var GRADE_BOUNDS_MAX_SIZE = 1.0
-static var GRADE_BOUNDS_LEVEL = 5
-static var GRADE_BOUNDS_DECREASE_FACTOR = 4
+var region_data: RegionData
 
-static var REGIONS: Array[AABB] = []
+func _init() -> void:
+	region_data = RegionData.new()
+	region_data.bounds = AABB(Vector3.ONE * -GRADE_BOUNDS_MAX_SIZE / 2.0, Vector3.ONE * GRADE_BOUNDS_MAX_SIZE)
 
-class Face:
-	var a: Vector3:
-		get:
-			return vertices[0]
-		set(new_a):
-			vertices[0] = new_a
-	var b: Vector3:
-		get:
-			return vertices[1]
-		set(new_b):
-			vertices[1] = new_b
-	var c: Vector3:
-		get:
-			return vertices[2]
-		set(new_c):
-			vertices[2] = new_c
+func calculate_child_regions_bounds(parent: AABB) -> Array[AABB]:
+	var result: Array[AABB] = []
+
+	var size := parent.size / float(GRADE_BOUNDS_DECREASE_FACTOR)
+
+	for x in GRADE_BOUNDS_DECREASE_FACTOR:
+		for y in GRADE_BOUNDS_DECREASE_FACTOR:
+			for z in GRADE_BOUNDS_DECREASE_FACTOR:
+				var offset := Vector3(x, y, z) * size
+
+				result.append(AABB(
+					parent.position + offset,
+					size
+				))
+	return result
+
+func attach_to_region(face: Face) -> bool:
+	return _attach_to_region(face, region_data, 0)
+
+## Returning: if new regions were created.
+func _attach_to_region(face: Face, region: RegionData, current_depth: int) -> bool:
+	if not face.intersects_region(region.bounds):
+		return false
+	var new := false
 	
-	var vertices: Array[Vector3] = [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
-	## This class uses several-grade bounds to filter out unnecessary triangle intersection calculations.
-	var bounds: AABB
-	var region: Array[int]
+	if current_depth >= GRADE_BOUNDS_LEVEL:
+		if not region.faces.has(face):
+			region.faces.append(face)
+		return true
+	
+	if region.regions.is_empty():
+		for bounds in calculate_child_regions_bounds(region.bounds):
+			if face.intersects_region(bounds):
+				var child := RegionData.new()
+				child.bounds = bounds
+				child.parent = region
+				region.regions.append(child)
+				new = true
+	
+	for subregion in region.regions:
+		new = _attach_to_region(face, subregion, current_depth + 1) || new
 
-static func generate_regions() -> void:
-	var size = GRADE_BOUNDS_MAX_SIZE
-	for k in GRADE_BOUNDS_LEVEL:
-		var dim := Vector3(size, size, size)
-		var x = -FIELD_SIZE.x
-		while x < FIELD_SIZE.x: 
-			var y = -FIELD_SIZE.y
-			while y < FIELD_SIZE.y:
-				var z = -FIELD_SIZE.z
-				while z < FIELD_SIZE.z:
-					var box = AABB(Vector3(x, y, z) - dim / 2.0, dim)
-					CollisionGeometry.REGIONS.append(box)
-					z += size
-				y += size
-			x += size
-		size /= GRADE_BOUNDS_DECREASE_FACTOR
-	return
+	return new
 
-static func get_triangles(node: MeshInstance3D) -> Array:
-	var ret = []
+static func get_triangles(node: MeshInstance3D) -> Array[Face]:
+	var ret: Array[Face] = []
 	var mesh := node.mesh
 	var transform := node.global_transform
 	
@@ -72,7 +78,7 @@ static func get_triangles(node: MeshInstance3D) -> Array:
 			))
 	return ret
 
-static func add_triangle(a: Vector3, b: Vector3, c: Vector3):
+static func add_triangle(a: Vector3, b: Vector3, c: Vector3) -> Face:
 	var face := Face.new()
 	
 	var minimum = a.min(b).min(c)

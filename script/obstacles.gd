@@ -18,7 +18,6 @@ func _ready() -> void:
 	shell_mat.shader = shell_shader
 	shell_mat.set_shader_parameter("thickness", safe_thickness)
 	
-	CollisionGeometry.generate_regions()
 	for child in get_children():
 		child.material_override = obstacle_material
 		

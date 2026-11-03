@@ -16,7 +16,7 @@ var enabled = false
 @export var handle_grab_distance: float = 0.08
 
 @export var zoom_step := 0.12
-@export var zoom_min := 0.11
+@export var zoom_min := 0.12
 @export var zoom_max := 4.0
 @export var focus_distance = 0.8
 

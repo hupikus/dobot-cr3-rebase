@@ -48,6 +48,9 @@ func _ready() -> void:
 	handle_material.albedo_color = handle_color
 	handle_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	create_handles()
+	
+	var c := CollisionGeometry.new()
+	c.generate_regions()
 
 
 func create_handles() -> void:
@@ -64,6 +67,7 @@ func create_handles() -> void:
 func _physics_process(delta):
 	if ghost.moved:
 		ghost.moved = false
+		return
 		update_collisions()
 
 func _process(delta: float) -> void:
