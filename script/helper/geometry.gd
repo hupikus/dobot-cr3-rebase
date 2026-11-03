@@ -19,7 +19,7 @@ class Face:
 			vertices[2] = new_c
 	
 	var vertices: Array[Vector3] = [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
-	## This class uses bounds to filter out unnecessary triangle intersection calculations.
+	## This class uses several-grade bounds to filter out unnecessary triangle intersection calculations.
 	var bounds: AABB
 
 static func get_triangles(node: MeshInstance3D) -> Array:

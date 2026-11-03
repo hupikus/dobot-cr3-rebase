@@ -12,13 +12,17 @@ const OBSTACLE_LAYER := 2
 @onready var ghost: DobotCR3 = $".."
 @onready var solid: DobotCR3 = $"../../ArmSolid"
 
-@onready var meshes: Array[Node3D] = [
+@onready var joints: Array[Node3D] = [
 	$"CR3-BASE/CR3_J1/LINK2-CR3A",
 	$"CR3-BASE/CR3_J1/LINK2-CR3A/CR3_J3",
 	$"CR3-BASE/CR3_J1/LINK2-CR3A/CR3_J3/CR3_J4",
 	$"CR3-BASE/CR3_J1/LINK2-CR3A/CR3_J3/CR3_J4/CR3_J5",
 	$"CR3-BASE/CR3_J1/LINK2-CR3A/CR3_J3/CR3_J4/CR3_J5/CR3-J6_CR3_2__CR30001_1_2",
 ]
+@onready var meshes: Array[MeshInstance3D] = [
+	
+]
+
 @onready var obstacle = $"../../Obstacles"
 @onready var obstacles = obstacle.get_children()
 var colliding := false
@@ -37,11 +41,9 @@ func _ready() -> void:
 	base_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	base_material.albedo_color = base_color
 	
-	for joint in meshes:
+	for joint in joints:
 		joint.material_override = base_material
 		geometry.append(CollisionGeometry.get_triangles(joint))
-	
-	print(obstacle.geometry)
 	
 	handle_material.albedo_color = handle_color
 	handle_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
@@ -49,7 +51,7 @@ func _ready() -> void:
 
 
 func create_handles() -> void:
-	for joint in meshes:
+	for joint in joints:
 		var handle := MeshInstance3D.new()
 		handle.mesh = sphere
 		
@@ -72,11 +74,12 @@ func update_collisions() -> void:
 	var space := get_world_3d().direct_space_state
 	var any := false
 
-	for i in meshes.size():
+	for i in joints.size():
 		if any:
 			break
-		var j := 0
+		var j := -1
 		for check in geometry + obstacle.geometry:
+			j += 1
 			if j <= i:
 				continue
 			if CollisionGeometry.meshes_intersect(geometry[i], check):
@@ -85,7 +88,7 @@ func update_collisions() -> void:
 
 	if any != colliding:
 		colliding = any
-		base_material.albedo_color = base_color_error if any else base_color
+		base_material.albedo_color = base_color_error if colliding else base_color
 	#screen_ui.set_collision(any)
 
 const ANGLE_INTERPOLATE_TRANSPARENCY = 0.4
@@ -95,7 +98,7 @@ func update_transparency() -> void:
 	
 	var i := 0
 	var total_diff := 0.0
-	for joint in meshes:
+	for joint in joints:
 		var diff = wrapf(ghost_pos[i] - solid_pos[i], -PI, PI)
 		diff = abs(diff)
 		total_diff += diff
