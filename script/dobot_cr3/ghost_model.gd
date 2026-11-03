@@ -74,7 +74,8 @@ func update_collisions() -> void:
 	var space := get_world_3d().direct_space_state
 	var any := false
 
-	for i in joints.size():
+	var joints_size = joints.size()
+	for i in joints_size:
 		if any:
 			break
 		var j := -1
@@ -82,6 +83,12 @@ func update_collisions() -> void:
 			j += 1
 			if j <= i:
 				continue
+			if i + 1 < joints_size and j == i + 1:
+				continue
+			if i < joints_size - 1 and j == joints_size - 1:
+				continue
+			
+			
 			if CollisionGeometry.meshes_intersect(geometry[i], check):
 				any = true
 				break
