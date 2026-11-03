@@ -16,7 +16,7 @@ var enabled = false
 @export var handle_grab_distance: float = 0.08
 
 @export var zoom_step := 0.12
-@export var zoom_min := 0.28
+@export var zoom_min := 0.11
 @export var zoom_max := 4.0
 @export var focus_distance = 0.8
 
@@ -192,7 +192,7 @@ func ray_hits_target(from: Vector3, dir: Vector3) -> bool:
 func nearest_handle(hand: XRController3D) -> int:
 	var best = -1
 	var best_dist = handle_grab_distance
-	for i in range(_handles.size()):
+	for i in _handles.size():
 		var d = hand.global_position.distance_to(_handles[i].global_position)
 		if d < best_dist:
 			best_dist = d
@@ -220,7 +220,7 @@ func create_gizmo() -> void:
 	gizmo.name = "TargetGizmo"
 	add_child(gizmo)
 	
-	for i in range(3):
+	for i in 3:
 		var axis_node := Node3D.new()
 		axis_node.rotation_degrees = rots[i]
 		gizmo.add_child(axis_node)
@@ -281,7 +281,7 @@ func closest_line_param(p: Vector3, a: Vector3, o: Vector3, d: Vector3) -> float
 func pick_axis(from: Vector3, dir: Vector3) -> int:
 	var best = -1
 	var best_dist = 0.055
-	for i in range(3):
+	for i in 3:
 		var axis = axis_vector(i)
 		var s = closest_line_param(target.global_position, axis, from, dir)
 		if is_nan(s) or s < -0.002 or s > gizmo_length + 0.06:

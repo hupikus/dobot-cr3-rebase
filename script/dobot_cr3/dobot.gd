@@ -42,6 +42,7 @@ const JOINT_LIMITS: Array[Vector2] = [
 var joint_angles := PackedFloat32Array()
 var default_angles := PackedFloat32Array()
 var reached := false
+var moved := false
 
 ## The list of joints edited by hand; resets after approval
 var pinned := PackedByteArray()
@@ -80,7 +81,7 @@ func quadratic_distance_to_target() -> float:
 
 func do_ik() -> void:
 	if target == null: return
-	for i in range(max_iterations):
+	for i in max_iterations:
 		for joint in range(5, -1, -1):
 			var distance_old := quadratic_distance_to_target()
 			if distance_old < target_distance:
@@ -98,12 +99,13 @@ func do_ik() -> void:
 			if distance_old <= distance_left && distance_old <= distance_right:
 				continue
 			
+			moved = true
 			rotate_joint(joint, step_angle if distance_right < distance_left else -step_angle)
 
 func move_to_state(angles: PackedFloat32Array, speed: float = -1.0) -> void:
 	var goal := PackedFloat32Array()
 	goal.resize(joints.size())
-	for i in range(joints.size()):
+	for i in joints.size():
 		var a: float = angles[i] if i < angles.size() else joint_angles[i]
 		goal[i] = clampf(a, JOINT_LIMITS[i].x, JOINT_LIMITS[i].y)
 
@@ -112,7 +114,7 @@ func move_to_state(angles: PackedFloat32Array, speed: float = -1.0) -> void:
 	moving_to = goal
 	move_elapsed = 0.0
 	var max_delta := 0.0
-	for i in range(joints.size()):
+	for i in joints.size():
 		max_delta = maxf(max_delta, absf(goal[i] - moving_from[i]))
 	move_duration = max_delta / use_speed if use_speed > 0.0 else 0.0
 
@@ -123,13 +125,13 @@ func move_to_state(angles: PackedFloat32Array, speed: float = -1.0) -> void:
 	is_transitioning = true
 
 func get_angles() -> PackedFloat32Array:
-	for i in range(JOINTS_LEN):
+	for i in JOINTS_LEN:
 		joint_angles[i] = joints[i].rotation[joint_axes[i]]
 	return joint_angles
 
 func apply_joint_angles(angles: PackedFloat32Array) -> void:
 	is_transitioning = false
-	for i in range(joints.size()):
+	for i in joints.size():
 		if i >= angles.size():
 			break
 		rotate_joint(i, angles[i] - joint_angles[i])

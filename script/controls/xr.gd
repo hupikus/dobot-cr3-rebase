@@ -81,7 +81,7 @@ func _process(delta: float) -> void:
 
 ## Process VR controllers input
 func update_vr_input(delta: float) -> void:
-	for i in range(hands.size()):
+	for i in hands.size():
 		var hand: XRController3D = hands[i]
 		var gripping: bool = hand.is_button_pressed(ACTION_GRIP)
 		var stick: Vector2 = hand.get_vector2(ACTION_STICK)
@@ -134,7 +134,7 @@ func update_vr_input(delta: float) -> void:
 func nearest_handle(hand: XRController3D) -> int:
 	var best := -1
 	var best_dist := handle_grab_distance
-	for i in range(handles.size()):
+	for i in handles.size():
 		var d := hand.global_position.distance_to(handles[i].global_position)
 		if d < best_dist:
 			best_dist = d

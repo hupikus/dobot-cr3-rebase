@@ -10,6 +10,9 @@ var shell_mat := ShaderMaterial.new()
 var obstacle_shader = preload("res://shaders/obstacle_mesh.gdshader")
 var shell_shader = preload("res://shaders/safety_area.gdshader")
 
+@onready var table = $"../Table/Mesh"
+
+var geometry: Array = []
 func _ready() -> void:
 	obstacle_material.shader = obstacle_shader
 	shell_mat.shader = shell_shader
@@ -25,10 +28,9 @@ func _ready() -> void:
 		shell.material_override = shell_mat
 		child.add_child(shell)
 		
+		if child.mesh == null:
+			continue
 		
-		child.create_trimesh_collision()
-		for om in child.get_children():
-			if om is StaticBody3D:
-				om.collision_layer = OBSTACLE_LAYER
-				om.collision_mask = 0
-				break
+		geometry.append(CollisionGeometry.get_triangles(child)) 
+	
+	geometry.append(CollisionGeometry.get_triangles(table)) 
