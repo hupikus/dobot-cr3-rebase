@@ -1,4 +1,4 @@
-extends Node
+extends Area3D
 
 @export var safe_thickness = 0.02
 
@@ -12,7 +12,10 @@ var shell_shader = preload("res://shaders/safety_area.gdshader")
 
 @onready var table = $"../Table/Mesh"
 
-var geometry: Array = []
+#var geometry: Array = []
+#var collision: CollisionGeometry = CollisionGeometry.new() 
+var collision: Array = []
+
 func _ready() -> void:
 	obstacle_material.shader = obstacle_shader
 	shell_mat.shader = shell_shader
@@ -27,10 +30,19 @@ func _ready() -> void:
 		
 		shell.material_override = shell_mat
 		child.add_child(shell)
-		
+	
+	for child in get_children() + [$"../Table/Mesh"]:
+		var shape := CollisionShape3D.new()
 		if child.mesh == null:
 			continue
 		
-		geometry.append(CollisionGeometry.get_triangles(child)) 
+		shape.shape = child.mesh.create_trimesh_shape()
+		shape.transform = child.transform
+		add_child(shape)
+		
+		#geometry.append(CollisionGeometry.get_triangles(child)) 
 	
-	geometry.append(CollisionGeometry.get_triangles(table))
+	collision_layer = 1
+	collision_mask = 2
+	monitoring = true
+	monitorable = true

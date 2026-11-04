@@ -150,7 +150,7 @@ visible = false
 material_override = SubResource("ShaderMaterial_2cqfq")
 mesh = SubResource("PlaneMesh_g4v7s")
 
-[node name="Obstacles" type="Node3D" parent="." unique_id=1156107802]
+[node name="Obstacles" type="Area3D" parent="." unique_id=1128069287]
 script = ExtResource("7_w48qg")
 
 [node name="Pillar" type="MeshInstance3D" parent="Obstacles" unique_id=1833631588 groups=["obstacles"]]

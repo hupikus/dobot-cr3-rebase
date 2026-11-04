@@ -39,6 +39,7 @@ func _attach_to_region(face: Face, region: RegionData, current_depth: int) -> bo
 	if current_depth >= GRADE_BOUNDS_LEVEL:
 		if not region.faces.has(face):
 			region.faces.append(face)
+			region.has_mesh = true
 		return true
 	
 	if region.regions.is_empty():
