@@ -4,6 +4,7 @@
 [ext_resource type="Material" uid="uid://6b6ynmxbx3py" path="res://materials/outer_mesh.tres" id="1_h2yge"]
 [ext_resource type="Script" uid="uid://r167skqi13tx" path="res://script/controls/mouse_controls.gd" id="1_lquwl"]
 [ext_resource type="Material" uid="uid://sxdbor6lgd4s" path="res://materials/inner_mesh.tres" id="2_1bvp3"]
+[ext_resource type="Script" uid="uid://dohkajc36jx0" path="res://script/client.gd" id="2_2cqfq"]
 [ext_resource type="Script" uid="uid://b2wh4tpkbf7nm" path="res://script/controls/xr.gd" id="2_7mycd"]
 [ext_resource type="PackedScene" uid="uid://bsa5tua42yenc" path="res://nodes/arm_ghost.tscn" id="3_1bvp3"]
 [ext_resource type="Shader" uid="uid://cbomsjly5yddc" path="res://shaders/sky.gdshader" id="3_5vw27"]
@@ -66,9 +67,6 @@ size = Vector3(1.4, 0.06, 0.9)
 transparency = 4
 albedo_color = Color(0.11207495, 0.2827793, 0.27619392, 0.18)
 
-[sub_resource type="BoxShape3D" id="table_shape"]
-size = Vector3(1.4, 0.06, 0.9)
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2cqfq"]
 render_priority = 0
 shader = ExtResource("7_vivmo")
@@ -77,6 +75,9 @@ shader_parameter/grid_color = Color(0.2, 0.22, 0.27, 1)
 shader_parameter/grid_spacing = 0.05
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_g4v7s"]
+
+[sub_resource type="BoxShape3D" id="table_shape"]
+size = Vector3(1.4, 0.06, 0.9)
 
 [sub_resource type="BoxMesh" id="pillar_mesh"]
 size = Vector3(0.12, 0.4, 0.12)
@@ -96,6 +97,9 @@ size = Vector2(0.72, 0.45)
 
 [node name="ManipulatorStation" type="Node3D" unique_id=1095012181]
 script = ExtResource("1_dg77c")
+
+[node name="Node3D" type="Node3D" parent="." unique_id=569264871]
+script = ExtResource("2_2cqfq")
 
 [node name="Effects" type="Node3D" parent="." unique_id=584400388]
 
@@ -141,9 +145,6 @@ transform = Transform3D(1.007, 0, 0, 0, 1.015, 0, 0, 0, 1.015, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_efxa6")
 mesh = SubResource("table_mesh")
 
-[node name="Collision" type="CollisionShape3D" parent="Table" unique_id=1538464604]
-shape = SubResource("table_shape")
-
 [node name="grid" type="MeshInstance3D" parent="Table" unique_id=1263370000]
 transform = Transform3D(0.6897405, 0, 0, 0, 1, 0, 0, 0, 0.44788247, 0, 0.03664708, 0)
 visible = false
@@ -152,6 +153,10 @@ mesh = SubResource("PlaneMesh_g4v7s")
 
 [node name="Obstacles" type="Area3D" parent="." unique_id=1128069287]
 script = ExtResource("7_w48qg")
+
+[node name="Table" type="CollisionShape3D" parent="Obstacles" unique_id=1538464604]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6448379, -0.55)
+shape = SubResource("table_shape")
 
 [node name="Pillar" type="MeshInstance3D" parent="Obstacles" unique_id=1833631588 groups=["obstacles"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.8596876, -0.52)

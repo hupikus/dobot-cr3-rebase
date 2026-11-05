@@ -22,6 +22,9 @@ func _ready() -> void:
 	shell_mat.set_shader_parameter("thickness", safe_thickness)
 	
 	for child in get_children():
+		if child is not MeshInstance3D:
+			continue
+		
 		child.material_override = obstacle_material
 		
 		var shell := MeshInstance3D.new()
@@ -30,18 +33,18 @@ func _ready() -> void:
 		
 		shell.material_override = shell_mat
 		child.add_child(shell)
-	
-	for child in get_children() + [$"../Table/Mesh"]:
+		
 		var shape := CollisionShape3D.new()
 		if child.mesh == null:
 			continue
 		
-		shape.shape = child.mesh.create_trimesh_shape()
+		shape.shape = shell.mesh.create_trimesh_shape()
 		shape.transform = child.transform
 		add_child(shape)
 		
 		#geometry.append(CollisionGeometry.get_triangles(child)) 
 	
+	#add_child($"../Table/Collision")
 	collision_layer = 1
 	collision_mask = 2
 	monitoring = true
