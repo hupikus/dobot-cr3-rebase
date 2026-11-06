@@ -1,9 +1,10 @@
-extends Node
+class_name UIScreen
+extends Node3D
 
 @export var screen_size := Vector2(0.72, 0.45)
 
 @onready var subviewport: SubViewport = $"SubRotation/SubViewport"
-@onready var ui: Control = $"SubRotation/SubViewport/UI"
+@onready var ui: ControlUI = $"SubRotation/SubViewport/UI"
 @onready var frame: MeshInstance3D = $"SubRotation/Frame"
 
 var material := StandardMaterial3D.new()
@@ -14,10 +15,9 @@ func _ready() -> void:
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	
-	if frame.material_override == null:
-		frame.material_override = material
+	frame.material_override = material
 	
-	#ui.reset_pressed.connect(_on_reset)
-	#ui.approve_pressed.connect(_on_approve)
-	#ui.safe_thickness_changed.connect(_on_safe_thickness_changed)
-	#ui.set_safe_thickness(_safe_thickness)
+	init_ui()
+
+func init_ui() -> void:
+	pass
