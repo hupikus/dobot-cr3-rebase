@@ -165,7 +165,7 @@ shadow_mesh = SubResource("ArrayMesh_7xfs0")
 size = Vector3(1.0993118, 0.9935913, 0.9900055)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3aorl"]
-size = Vector3(1.0993118, 0.8628769, 1.325077)
+size = Vector3(0.8759022, 0.8628769, 1.325077)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_w1yam"]
 size = Vector3(1.4735956, 0.88108826, 0.85974884)
@@ -348,7 +348,7 @@ transform = Transform3D(0.010000001, -7.4051876e-14, -3.246101e-16, 9.2489276e-1
 shape = SubResource("BoxShape3D_oyltp")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="CR3A_ASM/CR3-BASE/CR3_J1/LINK2-CR3A/CR3_J3/Area3D" unique_id=1289657496]
-transform = Transform3D(0.010000001, -7.4051876e-14, -3.8185598e-16, 9.2493565e-14, 0.010000001, 1.2279067e-13, 4.63451e-14, 0, 0.010000001, 0.004925357, 1.9192632e-05, 0.01194907)
+transform = Transform3D(0.010000001, -7.4051876e-14, -3.9096328e-16, 9.249425e-14, 0.010000001, 1.2978507e-13, 4.6354207e-14, 0, 0.010000001, 0.0051552234, 1.9192632e-05, 0.01194907)
 shape = SubResource("BoxShape3D_3aorl")
 
 [node name="CollisionShape3D3" type="CollisionShape3D" parent="CR3A_ASM/CR3-BASE/CR3_J1/LINK2-CR3A/CR3_J3/Area3D" unique_id=1046225037]
