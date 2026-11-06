@@ -2,9 +2,9 @@ extends Node
 
 @export var screen_size := Vector2(0.72, 0.45)
 
-@onready var subviewport: SubViewport = $SubViewport
-@onready var ui: Control = $SubViewport/UI
-@onready var frame: MeshInstance3D = $Frame
+@onready var subviewport: SubViewport = $"SubRotation/SubViewport"
+@onready var ui: Control = $"SubRotation/SubViewport/UI"
+@onready var frame: MeshInstance3D = $"SubRotation/Frame"
 
 var material := StandardMaterial3D.new()
 

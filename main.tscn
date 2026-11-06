@@ -93,7 +93,8 @@ height = 0.1
 albedo_color = Color(0.1584723, 0.15847233, 0.1584723, 1)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_7mycd"]
-size = Vector2(0.72, 0.45)
+size = Vector2(0.72, 0.48)
+center_offset = Vector3(0, 0, 0.72)
 
 [node name="ManipulatorStation" type="Node3D" unique_id=1095012181]
 script = ExtResource("1_dg77c")
@@ -194,23 +195,26 @@ script = ExtResource("6_272bh")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, -0.75)
 
 [node name="Screens" type="Node3D" parent="." unique_id=1941604643]
-transform = Transform3D(0.99999994, 0, 0, 0, 1.0000001, 0, 0, 0, 0.99999964, 0, 0, 0)
+transform = Transform3D(0.99999994, 0, 0, 0, 1.0000001, 0, 0, 0, 0.99999964, 0, 1.1598233, -0.4087813)
 
 [node name="Screen" type="Node3D" parent="Screens" unique_id=1689325039]
-transform = Transform3D(0.25558183, 0.13918126, -0.9567166, -0.035921827, 0.9902671, 0.13446577, 0.9661198, 0, 0.25809386, 0, 0, 0)
+transform = Transform3D(0.30975777, 0, -0.9508157, 0, 1.0000001, 0, 0.95081556, 0, 0.30975774, 0, 0, 0)
 script = ExtResource("14_w48qg")
 
-[node name="Frame" type="MeshInstance3D" parent="Screens/Screen" unique_id=836317613]
-transform = Transform3D(1.3925574, 0, 0, 0, -6.087062e-08, -1.3925577, 0, 1.3925575, -6.087062e-08, -3.8380072e-08, 1, -1.8780336)
+[node name="SubRotation" type="Node3D" parent="Screens/Screen" unique_id=744538804]
+transform = Transform3D(1, 0, 0, 0, 0.9909832, 0.13398619, 0, -0.13398619, 0.9909832, 0, 0, 0)
+
+[node name="Frame" type="MeshInstance3D" parent="Screens/Screen/SubRotation" unique_id=836317613]
+transform = Transform3D(1.3925575, 0, 0, 0, -6.0870626e-08, -1.3925579, 0, 1.3925576, -6.087064e-08, 0, 1, -1.72)
 material_override = SubResource("screen_mat")
 mesh = SubResource("PlaneMesh_7mycd")
 
-[node name="SubViewport" type="SubViewport" parent="Screens/Screen" unique_id=1751951395]
+[node name="SubViewport" type="SubViewport" parent="Screens/Screen/SubRotation" unique_id=1751951395]
 disable_3d = true
 size = Vector2i(512, 320)
 render_target_update_mode = 4
 
-[node name="UI" type="Control" parent="Screens/Screen/SubViewport" unique_id=1860135398]
+[node name="UI" type="Control" parent="Screens/Screen/SubRotation/SubViewport" unique_id=1860135398]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -219,20 +223,23 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Log" type="Node3D" parent="Screens" unique_id=1549799278]
-transform = Transform3D(0.5453078, 0.44110864, 0.7127851, 0, 0.85034007, -0.5262344, -0.8382361, 0.28695977, 0.4636968, 0, 0, 0)
+transform = Transform3D(0.54463905, 0, 0.8386706, 0, 1.0000005, 0, -0.83867073, 0, 0.544639, 0, 0, 0)
 script = ExtResource("14_w48qg")
 
-[node name="Frame" type="MeshInstance3D" parent="Screens/Log" unique_id=1976703221]
-transform = Transform3D(1.3925574, 0, 0, 0, -6.087062e-08, -1.3925577, 0, 1.3925575, -6.087062e-08, -3.8380072e-08, 1, -1.8780336)
+[node name="SubRotation" type="Node3D" parent="Screens/Log" unique_id=436550274]
+transform = Transform3D(1, 0, 0, 0, 0.94561625, -0.3252846, 0, 0.3252846, 0.94561625, 0, 0, 0)
+
+[node name="Frame" type="MeshInstance3D" parent="Screens/Log/SubRotation" unique_id=1976703221]
+transform = Transform3D(1.392557, 0, 0, 0, -0.34866858, -1.3482012, 0, 1.3482012, -0.34866858, 0, 1, -1.72)
 material_override = SubResource("screen_mat")
 mesh = SubResource("PlaneMesh_7mycd")
 
-[node name="SubViewport" type="SubViewport" parent="Screens/Log" unique_id=490119634]
+[node name="SubViewport" type="SubViewport" parent="Screens/Log/SubRotation" unique_id=490119634]
 disable_3d = true
 size = Vector2i(512, 320)
 render_target_update_mode = 4
 
-[node name="UI" type="Control" parent="Screens/Log/SubViewport" unique_id=530088068]
+[node name="UI" type="Control" parent="Screens/Log/SubRotation/SubViewport" unique_id=530088068]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
