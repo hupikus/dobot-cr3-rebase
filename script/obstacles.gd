@@ -29,7 +29,33 @@ func _ready() -> void:
 		
 		var shell := MeshInstance3D.new()
 		shell.name = "SafeArea"
-		shell.mesh = child.mesh
+			
+		# Duplicating the mesh to inflate it
+		var inflated_mesh: ArrayMesh
+		if child.mesh is PrimitiveMesh:
+			var arrays = child.mesh.get_mesh_arrays()
+			inflated_mesh = ArrayMesh.new()
+			inflated_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+		elif child.mesh is ArrayMesh:
+			inflated_mesh = child.mesh.duplicate()
+		
+		var st := SurfaceTool.new()
+		st.create_from(inflated_mesh, 0)
+		st.index()
+		st.generate_normals()
+		var welded: ArrayMesh = st.commit()
+		
+		var mdt := MeshDataTool.new()
+		if mdt.create_from_surface(welded, 0) == OK:
+			for i in mdt.get_vertex_count():
+				var vertex := mdt.get_vertex(i)
+				var normal := mdt.get_vertex_normal(i)
+				mdt.set_vertex(i, vertex + normal * safe_thickness)
+		
+		welded.clear_surfaces()
+		mdt.commit_to_surface(welded)
+		
+		shell.mesh = welded
 		
 		shell.material_override = shell_mat
 		child.add_child(shell)
