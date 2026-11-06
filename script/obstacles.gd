@@ -50,7 +50,7 @@ func _ready() -> void:
 			for i in mdt.get_vertex_count():
 				var vertex := mdt.get_vertex(i)
 				var normal := mdt.get_vertex_normal(i)
-				mdt.set_vertex(i, vertex + normal * safe_thickness)
+				mdt.set_vertex(i, vertex + normal * safe_thickness / child.scale)
 		
 		welded.clear_surfaces()
 		mdt.commit_to_surface(welded)

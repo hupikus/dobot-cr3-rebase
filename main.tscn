@@ -194,14 +194,14 @@ script = ExtResource("6_272bh")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, -0.75)
 
 [node name="Screens" type="Node3D" parent="." unique_id=1941604643]
-transform = Transform3D(0.45447, 0.337224, -0.824461, 0, 0.925569, 0.378579, 0.890762, -0.172053, 0.420644, 0.98, 1.05, -0.5)
+transform = Transform3D(0.99999994, 0, 0, 0, 1.0000001, 0, 0, 0, 0.99999964, 0, 0, 0)
 
 [node name="Screen" type="Node3D" parent="Screens" unique_id=1689325039]
-transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 2.9802322e-08, 0, 1, 0, 0, 0)
+transform = Transform3D(0.25558183, 0.13918126, -0.9567166, -0.035921827, 0.9902671, 0.13446577, 0.9661198, 0, 0.25809386, 0, 0, 0)
 script = ExtResource("14_w48qg")
 
 [node name="Frame" type="MeshInstance3D" parent="Screens/Screen" unique_id=836317613]
-transform = Transform3D(1.3925574, 0, 0, 0, -0.22504291, -1.3742532, 0, 1.3742533, -0.2250429, 0, 0, 0)
+transform = Transform3D(1.3925574, 0, 0, 0, -6.087062e-08, -1.3925577, 0, 1.3925575, -6.087062e-08, -3.8380072e-08, 1, -1.8780336)
 material_override = SubResource("screen_mat")
 mesh = SubResource("PlaneMesh_7mycd")
 
@@ -211,6 +211,28 @@ size = Vector2i(512, 320)
 render_target_update_mode = 4
 
 [node name="UI" type="Control" parent="Screens/Screen/SubViewport" unique_id=1860135398]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Log" type="Node3D" parent="Screens" unique_id=1549799278]
+transform = Transform3D(0.5453078, 0.44110864, 0.7127851, 0, 0.85034007, -0.5262344, -0.8382361, 0.28695977, 0.4636968, 0, 0, 0)
+script = ExtResource("14_w48qg")
+
+[node name="Frame" type="MeshInstance3D" parent="Screens/Log" unique_id=1976703221]
+transform = Transform3D(1.3925574, 0, 0, 0, -6.087062e-08, -1.3925577, 0, 1.3925575, -6.087062e-08, -3.8380072e-08, 1, -1.8780336)
+material_override = SubResource("screen_mat")
+mesh = SubResource("PlaneMesh_7mycd")
+
+[node name="SubViewport" type="SubViewport" parent="Screens/Log" unique_id=490119634]
+disable_3d = true
+size = Vector2i(512, 320)
+render_target_update_mode = 4
+
+[node name="UI" type="Control" parent="Screens/Log/SubViewport" unique_id=530088068]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
