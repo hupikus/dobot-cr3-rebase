@@ -1,4 +1,5 @@
 extends Node3D
 
-func _process(delta: float) -> void:
-	position.z += 0
+var startPos: Vector3
+func _ready() -> void:
+	startPos = position

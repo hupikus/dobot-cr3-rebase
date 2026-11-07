@@ -292,11 +292,11 @@ size = Vector3(0.12637806, 0.12356186, 0.066082954)
 [node name="ArmGhost" type="Node3D" unique_id=1031545588]
 
 [node name="CR3A_ASM" type="Node3D" parent="." unique_id=1093624238]
-transform = Transform3D(100, 0, 0, 0, -1.1920929e-05, 99.99999, 0, -99.99999, -1.1920929e-05, 0, 0, 0)
+transform = Transform3D(100, 0, 0, 0, -4.3711384e-06, 99.99999, 0, -99.99999, -4.3711384e-06, 0, 0, 0)
 script = ExtResource("1_2gtt7")
 
 [node name="CR3-BASE" type="MeshInstance3D" parent="CR3A_ASM" unique_id=1605250579]
-transform = Transform3D(1.7881393e-07, 0.99999994, 0, -0.99999994, 1.7881393e-07, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("ArrayMesh_2gtt7")
 
 [node name="Area3D" type="Area3D" parent="CR3A_ASM/CR3-BASE" unique_id=1634977490]

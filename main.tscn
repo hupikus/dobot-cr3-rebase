@@ -4,7 +4,7 @@
 [ext_resource type="Material" uid="uid://6b6ynmxbx3py" path="res://materials/outer_mesh.tres" id="1_h2yge"]
 [ext_resource type="Script" uid="uid://r167skqi13tx" path="res://script/controls/mouse_controls.gd" id="1_lquwl"]
 [ext_resource type="Material" uid="uid://sxdbor6lgd4s" path="res://materials/inner_mesh.tres" id="2_1bvp3"]
-[ext_resource type="Script" uid="uid://dohkajc36jx0" path="res://script/client.gd" id="2_2cqfq"]
+[ext_resource type="Script" uid="uid://dohkajc36jx0" path="res://script/dobot_cr3/client.gd" id="2_2cqfq"]
 [ext_resource type="Script" uid="uid://b2wh4tpkbf7nm" path="res://script/controls/xr.gd" id="2_7mycd"]
 [ext_resource type="PackedScene" uid="uid://bsa5tua42yenc" path="res://nodes/arm_ghost.tscn" id="3_1bvp3"]
 [ext_resource type="Shader" uid="uid://cbomsjly5yddc" path="res://shaders/sky.gdshader" id="3_5vw27"]
@@ -64,7 +64,7 @@ shader_parameter/outline_width_px = 2.0
 shader_parameter/viewport_size = Vector2(1920, 1080)
 
 [sub_resource type="BoxMesh" id="table_mesh"]
-size = Vector3(1.4, 0.06, 0.9)
+size = Vector3(1.4, 0.06, 2.0979493)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_efxa6"]
 transparency = 4
@@ -79,14 +79,14 @@ shader_parameter/grid_spacing = 0.05
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_g4v7s"]
 
-[sub_resource type="BoxShape3D" id="table_shape"]
-size = Vector3(1.4, 0.06, 0.9)
-
 [sub_resource type="BoxMesh" id="pillar_mesh"]
 size = Vector3(0.12, 0.4, 0.12)
 
 [sub_resource type="BoxMesh" id="block_mesh"]
 size = Vector3(0.22, 0.16, 0.22)
+
+[sub_resource type="BoxShape3D" id="table_shape"]
+size = Vector3(1.4, 0.05746582, 2.0979857)
 
 [sub_resource type="SphereMesh" id="target_mesh"]
 radius = 0.05
@@ -99,11 +99,15 @@ albedo_color = Color(0.1584723, 0.15847233, 0.1584723, 1)
 size = Vector2(0.72, 0.48)
 center_offset = Vector3(0, 0, 0.72)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_higxo"]
+size = Vector3(0.7496338, 0.02420044, 0.5075989)
+
 [node name="ManipulatorStation" type="Node3D" unique_id=1095012181]
 script = ExtResource("1_dg77c")
 
-[node name="Node3D" type="Node3D" parent="." unique_id=569264871]
+[node name="Client" type="Node3D" parent="." unique_id=569264871]
 script = ExtResource("2_2cqfq")
+enabled = true
 
 [node name="Effects" type="Node3D" parent="." unique_id=584400388]
 
@@ -140,11 +144,12 @@ mesh = SubResource("CylinderMesh_kek77")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6448379, -0.55)
 
 [node name="Mesh" type="MeshInstance3D" parent="Table" unique_id=359749556]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5989746)
 material_override = SubResource("table_mat")
 material_overlay = SubResource("ShaderMaterial_ycdy4")
 mesh = SubResource("table_mesh")
 
-[node name="MeshTint" type="MeshInstance3D" parent="Table" unique_id=679960613]
+[node name="MeshTint" type="MeshInstance3D" parent="Table/Mesh" unique_id=679960613]
 transform = Transform3D(1.007, 0, 0, 0, 1.015, 0, 0, 0, 1.015, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_efxa6")
 mesh = SubResource("table_mesh")
@@ -158,10 +163,6 @@ mesh = SubResource("PlaneMesh_g4v7s")
 [node name="Obstacles" type="Area3D" parent="." unique_id=1128069287]
 script = ExtResource("7_w48qg")
 
-[node name="Table" type="CollisionShape3D" parent="Obstacles" unique_id=1538464604]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6448379, -0.55)
-shape = SubResource("table_shape")
-
 [node name="Pillar" type="MeshInstance3D" parent="Obstacles" unique_id=1833631588 groups=["obstacles"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.8596876, -0.52)
 mesh = SubResource("pillar_mesh")
@@ -169,6 +170,10 @@ mesh = SubResource("pillar_mesh")
 [node name="Block" type="MeshInstance3D" parent="Obstacles" unique_id=1741854821 groups=["obstacles"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.29846945, 0.89360774, -0.45)
 mesh = SubResource("block_mesh")
+
+[node name="Table" type="CollisionShape3D" parent="Obstacles" unique_id=554173236]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.64357084, 0.048992813)
+shape = SubResource("table_shape")
 
 [node name="Target" type="Node3D" parent="." unique_id=627924243]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22955, 1.4296, -0.75)
@@ -191,11 +196,11 @@ light_size = 0.028
 light_bake_mode = 1
 
 [node name="ArmGhost" parent="." unique_id=1031545588 instance=ExtResource("3_1bvp3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, -0.75)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0.74, -0.75)
 script = ExtResource("6_272bh")
 
 [node name="ArmSolid" parent="." unique_id=1296330062 instance=ExtResource("4_lquwl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, -0.75)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0.74, -0.75)
 
 [node name="Screens" type="Node3D" parent="." unique_id=1941604643]
 transform = Transform3D(0.99999994, 0, 0, 0, 1.0000001, 0, 0, 0, 0.99999964, 0, 1.1598233, -0.4087813)
@@ -212,8 +217,15 @@ transform = Transform3D(1.3925575, 0, 0, 0, -6.0870626e-08, -1.3925579, 0, 1.392
 material_override = SubResource("screen_mat")
 mesh = SubResource("PlaneMesh_7mycd")
 
+[node name="Area3D" type="Area3D" parent="Screens/Screen/SubRotation/Frame" unique_id=1879723756]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Screens/Screen/SubRotation/Frame/Area3D" unique_id=1059662235]
+transform = Transform3D(1, 2.9802322e-08, 2.6077032e-08, 0, 0.9999999, -9.778887e-08, 0, 1.3038516e-08, 0.9999999, 0.004023552, 0.00079250336, 0.72096336)
+shape = SubResource("BoxShape3D_higxo")
+
 [node name="SubViewport" type="SubViewport" parent="Screens/Screen/SubRotation" unique_id=1751951395]
 disable_3d = true
+physics_object_picking = true
 size = Vector2i(512, 320)
 render_target_update_mode = 4
 

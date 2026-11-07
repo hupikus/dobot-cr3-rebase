@@ -1,15 +1,18 @@
+class_name DobotClient
 extends Node
 
 @export var enabled: bool = false
 @export var autoconnect: bool = true
 
-@export var ip = "192.168.5.1"
-@export var dashboard_port: int = 29999
-@export var motion_port: int = 30003
+const ip = "192.168.5.1"
+const dashboard_port: int = 29999
+const motion_port: int = 30003
 
 @export var reconnect: bool = false
 @export var reconnect_interval: float = 5.0
 var reconnect_timer := 0.0
+
+@onready var log = $"../Screens/Log"
 
 var dashboard := StreamPeerTCP.new()
 var motion := StreamPeerTCP.new()
@@ -45,7 +48,8 @@ func connect_client() -> void:
 	
 func _process(delta) -> void:
 	if not enabled: return
-	
+	dashboard.poll()
+	motion.poll()
 	var dashboard_status = dashboard.get_status() == StreamPeerTCP.STATUS_CONNECTED
 	var motion_status = motion.get_status() == StreamPeerTCP.STATUS_CONNECTED
 	
@@ -65,8 +69,9 @@ func _process(delta) -> void:
 	dump(motion)
 
 func init_robot() -> void:
-	send(dashboard, "EnableRobot()")
-	send(dashboard, "SpeedFactor(50)")
+	#send(dashboard, "EnableRobot()")
+	send(dashboard, "SpeedFactor(20)")
+	MovJ([0, 0, 0, 0, 0, 0])
 
 func send(stream: StreamPeerTCP, command: String) -> void:
 	if stream.get_status() == StreamPeerTCP.STATUS_CONNECTED:
@@ -81,8 +86,7 @@ func dump(stream: StreamPeerTCP) -> void:
 		return
 	
 	var buffer := (result[1] as PackedByteArray).get_string_from_utf8()
-	print(buffer)
-	# Send signal
+	log.push_message(buffer)
 
 func MovJ(pose: PackedFloat32Array) -> void:
 	if pose.size() != 6:

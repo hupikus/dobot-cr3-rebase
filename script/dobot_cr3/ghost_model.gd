@@ -9,6 +9,7 @@ const OBSTACLE_LAYER := 2
 
 @export var handle_scale: float = 1
 
+@onready var screen: UIScreen = $"../../Screens/Screen"
 @onready var ghost: DobotCR3 = $".."
 @onready var solid: DobotCR3 = $"../../ArmSolid"
 
@@ -123,8 +124,10 @@ func update_collisions() -> void:
 				#break
 
 	if any != colliding:
+		ghost.colliding = any
 		colliding = any
 		base_material.albedo_color = base_color_error if colliding else base_color
+		screen.refresh()
 	#screen_ui.set_collision(any)
 
 const ANGLE_INTERPOLATE_TRANSPARENCY = 0.4

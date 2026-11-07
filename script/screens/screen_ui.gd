@@ -37,3 +37,11 @@ func new_label(text: String, font_size: int = 30, font_color: Color = Color.WHIT
 	label.add_theme_color_override("font_color", font_color)
 	label.horizontal_alignment = aligment
 	return label
+
+func new_button(text: String, height: int = 84, font_size: int = 24) -> Button:
+	var button := Button.new()
+	button.text = text
+	button.custom_minimum_size = Vector2(0, height)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.add_theme_font_size_override("font_size", font_size)
+	return button

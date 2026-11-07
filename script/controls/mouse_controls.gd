@@ -77,6 +77,8 @@ func update_desktop_input(_delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not enabled:
 		return
+	#if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT and is_click_on_screen((event as InputEventMouseButton).position):
+	#	return
 	if event is InputEventMouseButton:
 		handle_mouse_button(event as InputEventMouseButton)
 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -92,6 +94,20 @@ func _unhandled_input(event: InputEvent) -> void:
 		_cam_pivot = target.global_position
 		_cam_distance = focus_distance
 		update_camera()
+
+func is_click_on_screen(mouse_pos: Vector2) -> bool:
+	var from = desktop_camera.project_ray_origin(mouse_pos)
+	var dir = desktop_camera.project_ray_normal(mouse_pos)
+	if dir.z > -0.3:
+		return false
+	var t = (-0.82 - from.z) / dir.z
+	if t < 0.5 or t > 5.0:
+		return false
+	var hit = from + dir * t
+	var half = screen_size * 0.5
+	var center = screen.global_position
+	var d = Vector2(hit.x - center.x, hit.y - center.y)
+	return absf(d.x) <= half.x and absf(d.y) <= half.y
 
 func pan_camera(vec: Vector2) -> void:
 	var basis := desktop_camera.global_transform.basis

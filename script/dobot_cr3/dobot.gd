@@ -14,6 +14,15 @@ var target: Node3D = null
 @export var active_solve: bool = true
 @export var default_speed: float = 0.6
 
+var busy := false
+var colliding := false
+
+@onready var client: DobotClient = $"../Client"
+@onready var ghost: DobotCR3 = $"../ArmGhost"
+@onready var solid: DobotCR3 = $"../ArmSolid"
+
+@onready var screen: UIScreen = $"../Screens/Screen"
+
 const JOINTS_LEN = 6
 @onready var joints: Array[Node3D] = [
 	$"CR3A_ASM/CR3-BASE/CR3_J1",
@@ -58,6 +67,7 @@ func _ready() -> void:
 	joint_angles.resize(JOINTS_LEN)
 	joint_angles.fill(0.0)
 	default_angles = joint_angles.duplicate()
+	default_angles[0] = PI / 2
 	pinned.resize(JOINTS_LEN)
 	pinned.fill(0)
 
@@ -86,8 +96,10 @@ func do_ik() -> void:
 			var distance_old := quadratic_distance_to_target()
 			if distance_old < target_distance:
 				reached = true
+				screen.refresh()
 				return
 			reached = false
+			screen.refresh()
 			
 			# Check distances when rotated right and when rotated left
 			rotate_joint(joint, step_angle)
@@ -129,6 +141,12 @@ func get_angles() -> PackedFloat32Array:
 		joint_angles[i] = joints[i].rotation[joint_axes[i]]
 	return joint_angles
 
+func get_angles_degree() -> PackedFloat32Array:
+	var angles = get_angles().duplicate()
+	for i in angles.size():
+		angles[i] = wrapf(rad_to_deg(angles[i]), -180.0, 180.0)
+	return angles
+
 func apply_joint_angles(angles: PackedFloat32Array) -> void:
 	is_transitioning = false
 	for i in joints.size():
@@ -136,3 +154,16 @@ func apply_joint_angles(angles: PackedFloat32Array) -> void:
 			break
 		rotate_joint(i, angles[i] - joint_angles[i])
 	reached = false
+
+
+func sync() -> void:
+	if ghost.colliding: return
+	for joint in joints.size():
+		joints[joint].rotation = ghost.joints[joint].rotation
+	client.MovJ(get_angles_degree())
+
+func reset() -> void:
+	for joint in joints.size():
+		joints[joint].rotation[joint_axes[joint]] = default_angles[joint]
+	if self == solid:
+		client.MovJ(get_angles_degree())
