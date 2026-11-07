@@ -15,10 +15,10 @@
 [ext_resource type="Shader" uid="uid://dxdn24u68rjvc" path="res://shaders/grid.gdshader" id="7_vivmo"]
 [ext_resource type="Script" uid="uid://dx47tytj6e84t" path="res://script/obstacles.gd" id="7_w48qg"]
 [ext_resource type="Script" uid="uid://dwvb6hx8jrkyj" path="res://script/target_runaway.gd" id="8_ycdy4"]
-[ext_resource type="Script" uid="uid://damb5tf8a4m4s" path="res://script/screens/screen.gd" id="14_w48qg"]
 [ext_resource type="Script" uid="uid://c7kgdwwkc7hx1" path="res://script/screens/dashboard.gd" id="16_yaehf"]
 [ext_resource type="Script" uid="uid://7nvxqxkf6ey1" path="res://script/screens/dashboard_ui.gd" id="17_074og"]
-[ext_resource type="Script" uid="uid://yh3hro05ex7v" path="res://script/screens/screen_ui.gd" id="19_cegan"]
+[ext_resource type="Script" uid="uid://da83ytqthoqrb" path="res://script/screens/log.gd" id="18_cegan"]
+[ext_resource type="Script" uid="uid://dkjstl7ipbmab" path="res://script/screens/log_ui.gd" id="19_cegan"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6wiwe"]
 shader = ExtResource("3_5vw27")
@@ -228,13 +228,13 @@ script = ExtResource("17_074og")
 
 [node name="Log" type="Node3D" parent="Screens" unique_id=1549799278]
 transform = Transform3D(0.54463905, 0, 0.8386706, 0, 1.0000005, 0, -0.83867073, 0, 0.544639, 0, 0, 0)
-script = ExtResource("14_w48qg")
+script = ExtResource("18_cegan")
 
 [node name="SubRotation" type="Node3D" parent="Screens/Log" unique_id=436550274]
 transform = Transform3D(1, 0, 0, 0, 0.94561625, -0.3252846, 0, 0.3252846, 0.94561625, 0, 0, 0)
 
 [node name="Frame" type="MeshInstance3D" parent="Screens/Log/SubRotation" unique_id=1976703221]
-transform = Transform3D(1.392557, 0, 0, 0, -0.34866858, -1.3482012, 0, 1.3482012, -0.34866858, 0, 1, -1.72)
+transform = Transform3D(1.392557, 0, 0, 0, -0.34866858, -1.3482012, 0, 1.3482012, -0.34866858, 0, 1, -1.16)
 material_override = SubResource("screen_mat")
 mesh = SubResource("PlaneMesh_7mycd")
 
@@ -251,6 +251,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("19_cegan")
+element_margin = 8
 
 [node name="DesktopCamera" type="Camera3D" parent="." unique_id=1503592995]
 transform = Transform3D(0.993533, 0.052418, -0.100723, 0, 0.887064, 0.461647, 0.113547, -0.458662, 0.881327, 0, 1.55, 0.4)

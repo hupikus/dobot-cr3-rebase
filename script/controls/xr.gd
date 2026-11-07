@@ -13,8 +13,6 @@ var enabled = false
 @onready var desktop_controls: Node3D = $"../MouseControls"
 
 @onready var screen: Node3D = $"../../Screens/Screen"
-@onready var screen_frame: MeshInstance3D = $"../../Screens/Screen/Frame"
-@onready var subviewport: SubViewport = $"../../Screens/Screen/SubViewport"
 
 @onready var target: Node3D = $"../../Target"
 @onready var xr_origin: XROrigin3D = $"../../XROrigin3D"
@@ -166,7 +164,7 @@ func screen_uv(hand: XRController3D) -> Vector2:
 
 
 func click_screen(uv: Vector2) -> void:
-	var vp_size := Vector2(subviewport.size)
+	var vp_size := Vector2(screen.size)
 	var pos := Vector2(uv.x * vp_size.x, uv.y * vp_size.y)
 	for pressed in [true, false]:
 		var event := InputEventMouseButton.new()
@@ -176,4 +174,4 @@ func click_screen(uv: Vector2) -> void:
 		event.global_position = pos
 		if pressed:
 			event.button_mask = MOUSE_BUTTON_MASK_LEFT
-		subviewport.push_input(event, true)
+		screen.push_input(event, true)

@@ -1,7 +1,7 @@
 class_name UIScreen
 extends Node3D
 
-@export var screen_size := Vector2(0.72, 0.45)
+@export var size := Vector2(0.72, 0.45)
 
 @onready var subviewport: SubViewport = $"SubRotation/SubViewport"
 @onready var ui: ControlUI = $"SubRotation/SubViewport/UI"
@@ -20,4 +20,4 @@ func _ready() -> void:
 	init_ui()
 
 func init_ui() -> void:
-	pass
+	ui.init_ui()
