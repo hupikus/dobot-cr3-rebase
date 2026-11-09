@@ -33,10 +33,9 @@ func init_ui() -> void:
 func ui_reset() -> void:
 	if reset_disabled: return
 	print("UI_RESET")
-	target.position = target.startPos
 	solid.reset()
 	ghost.reset()
-	
+	target.global_position = ghost.joints[5].global_position
 
 func ui_approve() -> void:
 	if approve_disabled: return
