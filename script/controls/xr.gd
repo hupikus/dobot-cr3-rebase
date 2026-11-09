@@ -62,6 +62,7 @@ func activate() -> void:
 
 ## Create VR controller pointers
 func create_lasers() -> void:
+	print("LASERS")
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = Color(0.2, 1.0, 0.4, 0.5)
 	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA

@@ -123,7 +123,6 @@ script = ExtResource("1_lquwl")
 
 [node name="XR" type="Node3D" parent="Controls" unique_id=767765804]
 script = ExtResource("2_7mycd")
-active = false
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1417810211]
 environment = SubResource("env")
