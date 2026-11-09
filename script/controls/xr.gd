@@ -5,6 +5,7 @@ var enabled = false
 @onready var ghost: DobotCR3 = $"../../ArmGhost"
 @onready var solid: DobotCR3 = $"../../ArmSolid"
 
+@export var active := true
 @export var grab_distance: float = 0.16
 @export var handle_grab_distance: float = 0.08
 ## Meters/second per full joystick deflection.
@@ -43,6 +44,10 @@ var trigger_prev: Array[bool] = [false, false]
 var handles: Array[MeshInstance3D] = []
 
 func _ready() -> void:
+	if not active: return
+	activate()
+
+func activate() -> void:
 	var xr := XRServer.find_interface("OpenXR")
 	var xr_active: bool = xr != null and xr.is_initialized()
 	if xr_active:

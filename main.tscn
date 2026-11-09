@@ -64,7 +64,7 @@ shader_parameter/outline_width_px = 2.0
 shader_parameter/viewport_size = Vector2(1920, 1080)
 
 [sub_resource type="BoxMesh" id="table_mesh"]
-size = Vector3(1.4852539, 0.06, 1.4616455)
+size = Vector3(0.9382141, 0.06, 0.8596741)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_efxa6"]
 transparency = 4
@@ -79,14 +79,17 @@ shader_parameter/grid_spacing = 0.05
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_g4v7s"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_cegan"]
+size = Vector3(0.026992187, 0.9228625, 0.8279492)
+
 [sub_resource type="BoxMesh" id="pillar_mesh"]
 size = Vector3(0.12, 0.4, 0.12)
 
 [sub_resource type="BoxMesh" id="block_mesh"]
-size = Vector3(0.22, 0.16, 0.22)
+size = Vector3(0.3386377, 0.21232422, 0.3855664)
 
 [sub_resource type="BoxShape3D" id="table_shape"]
-size = Vector3(1.5017151, 0.17082275, 1.4789531)
+size = Vector3(1.0144504, 0.17082275, 0.87022656)
 
 [sub_resource type="SphereMesh" id="target_mesh"]
 radius = 0.05
@@ -120,6 +123,7 @@ script = ExtResource("1_lquwl")
 
 [node name="XR" type="Node3D" parent="Controls" unique_id=767765804]
 script = ExtResource("2_7mycd")
+active = false
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1417810211]
 environment = SubResource("env")
@@ -144,7 +148,7 @@ mesh = SubResource("CylinderMesh_kek77")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6448379, -0.55)
 
 [node name="Mesh" type="MeshInstance3D" parent="Table" unique_id=359749556]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6381347, 0, -0.23897707)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.056649864, 0, -0.5399627)
 material_override = SubResource("table_mat")
 material_overlay = SubResource("ShaderMaterial_ycdy4")
 mesh = SubResource("table_mesh")
@@ -163,20 +167,24 @@ mesh = SubResource("PlaneMesh_g4v7s")
 [node name="Obstacles" type="Area3D" parent="." unique_id=1128069287]
 script = ExtResource("7_w48qg")
 
+[node name="TableWall" type="MeshInstance3D" parent="Obstacles" unique_id=1033689448 groups=["obstacles"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55141544, 1.0848196, -1.078623)
+mesh = SubResource("BoxMesh_cegan")
+
 [node name="Pillar" type="MeshInstance3D" parent="Obstacles" unique_id=1833631588 groups=["obstacles"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.8596876, -0.52)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.480873, 0.8596876, -0.7812156)
 mesh = SubResource("pillar_mesh")
 
 [node name="Block" type="MeshInstance3D" parent="Obstacles" unique_id=1741854821 groups=["obstacles"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.29846945, 0.89360774, -0.45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.355986, 0.7762122, -1.029343)
 mesh = SubResource("block_mesh")
 
 [node name="Table" type="CollisionShape3D" parent="Obstacles" unique_id=554173236]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.63490295, 0.58689237, -0.7883114)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09450361, 0.58689237, -1.0847528)
 shape = SubResource("table_shape")
 
 [node name="Target" type="Node3D" parent="." unique_id=627924243]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.43, -0.98)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.23, 1.43, -0.75)
 script = ExtResource("8_ycdy4")
 
 [node name="OuterMesh" type="MeshInstance3D" parent="Target" unique_id=1655934572]

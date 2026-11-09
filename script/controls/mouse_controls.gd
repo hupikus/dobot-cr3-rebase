@@ -24,6 +24,7 @@ var enabled = false
 
 var gizmo_length = 0.22
 
+@onready var xr = $"../XR"
 @onready var ghost_model = $"../../ArmGhost/CR3A_ASM"
 @onready var _handles = ghost_model.handles
 
@@ -44,7 +45,7 @@ var _cam_pitch := 0.32
 var _cam_distance := 1.9
 
 func _ready() -> void:
-	if enabled: enable()
+	if enabled || not xr.active: enable()
 
 func enable() -> void:
 	enabled = true
