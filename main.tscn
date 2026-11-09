@@ -64,7 +64,7 @@ shader_parameter/outline_width_px = 2.0
 shader_parameter/viewport_size = Vector2(1920, 1080)
 
 [sub_resource type="BoxMesh" id="table_mesh"]
-size = Vector3(1.4, 0.06, 2.0979493)
+size = Vector3(1.4852539, 0.06, 1.4616455)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_efxa6"]
 transparency = 4
@@ -86,7 +86,7 @@ size = Vector3(0.12, 0.4, 0.12)
 size = Vector3(0.22, 0.16, 0.22)
 
 [sub_resource type="BoxShape3D" id="table_shape"]
-size = Vector3(1.4, 0.05746582, 2.0979857)
+size = Vector3(1.5017151, 0.17082275, 1.4789531)
 
 [sub_resource type="SphereMesh" id="target_mesh"]
 radius = 0.05
@@ -140,11 +140,11 @@ transform = Transform3D(1, 0, 0, 0, 0.01, 0, 0, 0, 1, 0, 0.1, 0)
 material_override = SubResource("ShaderMaterial_4c57u")
 mesh = SubResource("CylinderMesh_kek77")
 
-[node name="Table" type="StaticBody3D" parent="." unique_id=945603866]
+[node name="Table" type="Node3D" parent="." unique_id=218986840]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6448379, -0.55)
 
 [node name="Mesh" type="MeshInstance3D" parent="Table" unique_id=359749556]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5989746)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6381347, 0, -0.23897707)
 material_override = SubResource("table_mat")
 material_overlay = SubResource("ShaderMaterial_ycdy4")
 mesh = SubResource("table_mesh")
@@ -172,11 +172,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.29846945, 0.89360774, -0.4
 mesh = SubResource("block_mesh")
 
 [node name="Table" type="CollisionShape3D" parent="Obstacles" unique_id=554173236]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.64357084, 0.048992813)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.63490295, 0.58689237, -0.7883114)
 shape = SubResource("table_shape")
 
 [node name="Target" type="Node3D" parent="." unique_id=627924243]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22955, 1.4296, -0.75)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.43, -0.98)
 script = ExtResource("8_ycdy4")
 
 [node name="OuterMesh" type="MeshInstance3D" parent="Target" unique_id=1655934572]
@@ -196,11 +196,11 @@ light_size = 0.028
 light_bake_mode = 1
 
 [node name="ArmGhost" parent="." unique_id=1031545588 instance=ExtResource("3_1bvp3")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0.74, -0.75)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, -0.75)
 script = ExtResource("6_272bh")
 
 [node name="ArmSolid" parent="." unique_id=1296330062 instance=ExtResource("4_lquwl")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0.74, -0.75)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, -0.75)
 
 [node name="Screens" type="Node3D" parent="." unique_id=1941604643]
 transform = Transform3D(0.99999994, 0, 0, 0, 1.0000001, 0, 0, 0, 0.99999964, 0, 1.1598233, -0.4087813)
@@ -278,3 +278,5 @@ tracker = &"/user/hand/left"
 
 [node name="RightHand" type="XRController3D" parent="XROrigin3D" unique_id=56768880]
 tracker = &"/user/hand/right"
+
+[editable path="ArmGhost"]

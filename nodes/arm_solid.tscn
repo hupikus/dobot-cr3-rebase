@@ -267,7 +267,7 @@ transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("ArrayMesh_ovtth")
 
 [node name="CR3_J1" type="MeshInstance3D" parent="CR3A_ASM/CR3-BASE" unique_id=2053543834]
-transform = Transform3D(1.7881393e-07, -0.99999994, 0, 0.99999994, 1.7881393e-07, 0, 0, 0, 1, 0, 0, 0.000278)
+transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 1, 0, 0, 0.000278)
 mesh = SubResource("ArrayMesh_j6kut")
 
 [node name="LINK2-CR3A" type="MeshInstance3D" parent="CR3A_ASM/CR3-BASE/CR3_J1" unique_id=778504435]

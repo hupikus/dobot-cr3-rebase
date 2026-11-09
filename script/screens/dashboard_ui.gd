@@ -5,14 +5,18 @@ extends ControlUI
 @onready var target = $"../../../../../Target"
 
 var status_label: Label
+var machine_status_label: Label
 var reset_button
 var approve_button
 func init_ui() -> void:
 	ui_parent.add_child(new_label("DOBOT CR3", 30))
-	
 	status_label = new_label("Status:", 26)
-	status_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	status_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	ui_parent.add_child(status_label)
+	
+	machine_status_label = new_label("Dobot CR3 status:", 22)
+	status_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	ui_parent.add_child(machine_status_label)
 	
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 16)
@@ -39,13 +43,17 @@ func ui_approve() -> void:
 	print("UI_APPROVE")
 	solid.sync()
 
+@export var approve_color := Color(0.7, 1, 0.7)
+@export var warn_color := Color(1, 0.82, 0.35)
+@export var disapprove_color := Color(1, 0.35, 0.35)
+
 var approve_disabled := false
 var reset_disabled := false
 func refresh() -> void:
 	approve_disabled = false
 	reset_disabled = false
 	var text := "Ready"
-	var color := Color(0.7, 1, 0.7)
+	var color := approve_color
 	if solid.busy || not ghost.reached:
 		text = "MOVING - please wait"
 		color = Color(1, 0.82, 0.35)
@@ -55,7 +63,13 @@ func refresh() -> void:
 		text = "COLLISION - cannot approve"
 		color = Color(1, 0.35, 0.35)
 		approve_disabled = true
-
+	
+	var dobot_text := "Dobot arm: disconnected"
+	var dobot_status_color := disapprove_color
+	if solid.client.connected:
+		dobot_text = "Dobot arm: connected"
+		dobot_status_color = approve_color
+	
 	if approve_button:
 		approve_button.disabled = approve_disabled
 		approve_button.modulate = Color(1, 1, 1, 0.4) if approve_disabled else Color(1, 1, 1, 1)
@@ -65,3 +79,6 @@ func refresh() -> void:
 	if status_label:
 		status_label.text = text
 		status_label.add_theme_color_override("font_color", color)
+	if machine_status_label:
+		machine_status_label.text = dobot_text
+		machine_status_label.add_theme_color_override("font_color", dobot_status_color)

@@ -13,7 +13,6 @@ func init_ui() -> void:
 		lines.append(label)
 
 func push_message(msg: String) -> void:
-	print("I BEGEG")
 	for i in MAX_LOG_LINES:
 		if lines_taken < MAX_LOG_LINES:
 			lines[lines_taken].text = msg

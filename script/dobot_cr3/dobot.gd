@@ -2,6 +2,8 @@ class_name DobotCR3
 extends Node
 
 const EPSILON = 0.0001
+const STILL_TICKS = 20
+var ticks_still := 0
 
 @export var target_distance: float = 0.0015
 ## Step angle per one iteration
@@ -109,8 +111,12 @@ func do_ik() -> void:
 			rotate_joint(joint, step_angle)
 			
 			if distance_old <= distance_left && distance_old <= distance_right:
+				ticks_still += 1
+				if ticks_still >= STILL_TICKS:
+					reached = true
 				continue
 			
+			ticks_still = 0
 			moved = true
 			rotate_joint(joint, step_angle if distance_right < distance_left else -step_angle)
 
@@ -160,10 +166,10 @@ func sync() -> void:
 	if ghost.colliding: return
 	for joint in joints.size():
 		joints[joint].rotation = ghost.joints[joint].rotation
-	client.MovJ(get_angles_degree())
+	client.JointMovJ(get_angles_degree())
 
 func reset() -> void:
 	for joint in joints.size():
 		joints[joint].rotation[joint_axes[joint]] = default_angles[joint]
 	if self == solid:
-		client.MovJ(get_angles_degree())
+		client.JointMovJ(get_angles_degree())
